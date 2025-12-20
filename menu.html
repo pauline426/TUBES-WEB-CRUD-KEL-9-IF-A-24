@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Warung Nasi Serba Serbi</title>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: Poppins, sans-serif;
+        background: #fff7ef;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        width: 100%;
+        overflow-x: hidden;
+      }
+
+      /* ================= NAVBAR ================= */
+      nav {
+        width: 100%;
+        padding: 20px 50px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: transparent;
+      }
+      .logo-area {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-left: 20px;
+      }
+      .logo {
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+        background: #fff;
+        padding: 5px;
+        box-shadow: 0 0 20px rgba(255, 166, 0, 0.6),
+          0 0 40px rgba(255, 166, 0, 0.3);
+      }
+      .brand-text {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #f27202;
+        transition: color 0.5s ease;
+        line-height: 1.3;
+      }
+
+      .nav-menu {
+        display: flex;
+        gap: 40px;
+        list-style: none;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .nav-menu li a {
+        color: #111;
+        text-decoration: none;
+        font-weight: bold;
+        background-color: #ff7a00;
+        padding: 8px 15px;
+        border-radius: 50px;
+        transition: 0.3s ease;
+        display: inline-block;
+        transform: scale(1);
+      }
+
+      .nav-menu li a:hover {
+        transform: scale(1.25);
+        background-color: #ff9a2a;
+        color: #fff;
+      }
+
+      .nav-menu li a.active {
+        transform: scale(1.25);
+        background-color: #ff9a2a;
+        color: #fff;
+      }
+
+      .auth-buttons {
+        display: flex;
+        gap: 15px;
+        margin-right: 15vh;
+      }
+      .auth-buttons a {
+        padding: 10px 18px;
+        border-radius: 30px;
+        font-weight: 700;
+        text-decoration: none;
+      }
+      .signin {
+        color: #111;
+      }
+      .signin:hover {
+        background-color: #ff7a00;
+        border-radius: 50px;
+        transition: 1s;
+      }
+      .signup {
+        background-color: #ff7a00;
+        color: white;
+      }
+
+      /*=============== SIDEBAR ================*/
+      .container {
+        display: grid;
+        grid-template-columns: 260px 1fr;
+        margin-top: 10px;
+        flex: 1;
+      }
+
+      .sidebar {
+        background: #fff1dd;
+        padding: 30px;
+        border-radius: 0 40px 0 0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .sidebar h1 {
+        font-size: 28px;
+        margin-bottom: 20px;
+        color: #7a3e00;
+      }
+
+      .menu-item {
+        font-weight: bold;
+        color: #ff7a00;
+        margin: 10px 0;
+        cursor: pointer;
+        transition: transform 0.25s ease, color 0.25s ease;
+        display: inline-block;
+        position: relative;
+        padding-bottom: 6px;
+      }
+
+      .menu-item::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        height: 2px;
+        width: 100%;
+        background-color: #ffbe7a;
+        transform-origin: left;
+        transform: scaleX(1);
+        transition: transform 0.3s ease;
+      }
+
+      .menu-item:hover {
+        transform: scale(1.12);
+        color: #ff9a2a;
+      }
+
+      .menu-item:hover::after {
+        transform: scaleX(0.45);
+      }
+
+      /*=============== SEARCH BAR MODERN ============*/
+      .content {
+        padding: 20px;
+      }
+
+      .search-modern {
+        width: 70%;
+        margin: 0 auto 25px auto;
+        display: flex;
+        align-items: center;
+      }
+      .search-modern input {
+        flex: 1;
+        padding: 14px 20px;
+        border: none;
+        border-radius: 40px 0 0 40px;
+        font-size: 17px;
+        background: #fffdf0;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      }
+      .search-modern button {
+        width: 55px;
+        height: 48px;
+        border: none;
+        border-radius: 0 40px 40px 0;
+        background: white;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      }
+      .search-modern button img {
+        width: 24px;
+        opacity: 0.7;
+      }
+
+      /*============== MENU GRID ===========*/
+      .menu-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 25px;
+      }
+
+      .card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+        transition: transform 0.25s;
+      }
+      .card:hover {
+        transform: scale(1.04);
+      }
+      .card img {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+      }
+
+      .card-info {
+        background: #fff8ef;
+        padding: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .card-title {
+        font-weight: 600;
+        font-size: 16px;
+      }
+      .card-price {
+        font-size: 14px;
+        color: #ff7a00;
+        font-weight: bold;
+      }
+      .add-btn {
+        font-size: 23px;
+        cursor: pointer;
+        color: #ff8b00;
+      }
+
+      /*============= FOOTER ============*/
+      .footer {
+        background: #222;
+        color: #eee;
+        padding: 20px 20px;
+      }
+
+      .footer-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 30px;
+        max-width: 1200px;
+        margin: auto;
+      }
+
+      .footer-column h3,
+      .footer-column h4 {
+        color: #ff7a00;
+        margin-bottom: 12px;
+      }
+
+      .footer-bottom {
+        margin-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.15);
+        padding-top: 0px;
+        text-align: center;
+        font-size: 0.85rem;
+        opacity: 0.8;
+      }
+
+      .footer-bottom p {
+        padding-top: 20px;
+      }
+      /* ============ RESPONSIVE =========== */
+      @media (max-width: 900px) {
+        .container {
+          grid-template-columns: 200px 1fr;
+        }
+
+        .menu-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .search-modern {
+          width: 90%;
+        }
+
+        .nav-menu {
+          gap: 20px;
+        }
+      }
+
+      @media (max-width: 700px) {
+        nav {
+          padding: 10px 15px;
+        }
+
+        .auth-buttons {
+          display: none;
+        }
+
+        .nav-menu {
+          gap: 15px;
+        }
+
+        .container {
+          grid-template-columns: 180px 1fr;
+        }
+
+        .menu-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 18px;
+        }
+
+        .card img {
+          height: 220px;
+        }
+      }
+
+      @media (max-width: 520px) {
+        nav {
+          flex-direction: row;
+          justify-content: space-between;
+        }
+
+        .nav-menu {
+          display: none;
+        }
+
+        .container {
+          grid-template-columns: 1fr;
+        }
+
+        .sidebar {
+          border-radius: 0 0 25px 25px;
+          padding: 20px;
+          align-items: center;
+          text-align: center;
+        }
+
+        .sidebar h1 {
+          font-size: 22px;
+        }
+
+        .menu-item {
+          font-size: 15px;
+        }
+
+        .menu-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .search-modern {
+          width: 100%;
+        }
+        .search-modern input {
+          font-size: 15px;
+          padding: 12px;
+        }
+
+        .card img {
+          height: 200px;
+        }
+      }
+      /* ======== HAMBURGER MOBILE & TABLET MENU ======= */
+      .hamburger {
+        display: none;
+        flex-direction: column;
+        gap: 5px;
+        cursor: pointer;
+        z-index: 2001;
+        margin-right: 10px;
+        margin-right: 6vh;
+      }
+      .hamburger span {
+        width: 30px;
+        height: 4px;
+        background: #ff7a00;
+        border-radius: 3px;
+      }
+
+      .mobile-menu {
+        position: fixed;
+        top: 0;
+        right: -300px;
+        width: 260px;
+        height: 200vh;
+        background: #ff7a00;
+        transition: 0.4s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 60px;
+        z-index: 2000;
+      }
+
+      .nav-menu-mobile {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+        text-align: center;
+      }
+      .nav-menu-mobile li {
+        width: 100%;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+        padding-bottom: 10px;
+      }
+
+      .nav-menu-mobile li a {
+        color: white;
+        font-size: 18px;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      .auth-mobile {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 30vh;
+      }
+      .auth-mobile a {
+        color: white;
+        padding: 10px 20px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 15px;
+        text-align: center;
+        text-decoration: none;
+      }
+
+      @media (max-width: 992px) {
+        .hamburger {
+          display: flex;
+        }
+        .nav-menu,
+        .auth-buttons {
+          display: none !important;
+        }
+        .mobile-menu.active {
+          right: 0;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!----- NAVBAR ----->
+
+    <nav>
+      <div class="logo-area">
+        <img src="Produk/Img/logo/logo.png" alt="Logo" class="logo" />
+        <span class="brand-text">Serba Serbi Nasi<br />Bu Henny</span>
+      </div>
+
+      <ul class="nav-menu">
+        <li><a href="Beranda.html">Beranda</a></li>
+        <li><a href="tentang.html">Tentang</a></li>
+        <li><a href="menu.html" class="active">Menu</a></li>
+        <li><a href="staf.html">Staf</a></li>
+        <li><a href="Pesan.html">Pesan</a></li>
+      </ul>
+
+      <div class="auth-buttons">
+        <a class="signin" href="#login">Sign In</a>
+        <a class="signup" href="#daftar">Sign Up</a>
+      </div>
+
+      <!-- HAMBURGER BUTTON -->
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <!-- MOBILE MENU -->
+      <div class="mobile-menu" id="mobileMenu">
+        <ul class="nav-menu-mobile">
+          <li><a href="Beranda.html">Beranda</a></li>
+          <li><a href="tentang.html">Tentang</a></li>
+          <li><a href="menu.html" class="active">Menu</a></li>
+          <li><a href="staf.html">Staf</a></li>
+          <li><a href="Pesan.html">Pesan</a></li>
+        </ul>
+
+        <div class="auth-mobile">
+          <a href="#login">Sign In</a>
+          <a href="#daftar">Sign Up</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- LAYOUT -->
+    <div class="container">
+      <!-- SIDEBAR -->
+      <div class="sidebar">
+        <h1>Menu Makanan</h1>
+        <div class="menu-item">Hidangan utama</div>
+        <div class="menu-item">Menu paket</div>
+        <div class="menu-item">Minuman</div>
+        <div class="menu-item">Camilan</div>
+      </div>
+
+      <!-- CONTENT -->
+      <div class="content">
+        <div class="search-modern">
+          <input type="text" placeholder="Ketik disini..." />
+          <button>
+            <img src="https://cdn-icons-png.flaticon.com/512/622/622669.png" />
+          </button>
+        </div>
+
+        <div class="menu-grid"></div>
+      </div>
+    </div>
+
+    <!-- FOOTER DI LUAR CONTENT -->
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-column">
+          <h3 class="footer-brand">Serba Serbi Nasi Bu Henny</h3>
+          <p>Cita rasa rumahan yang selalu dirindukan.</p>
+        </div>
+
+        <div class="footer-column">
+          <h4>Hubungi Kami</h4>
+          <p>📞 +62 8572 0261 642</p>
+          <p>✉️ serbaserbi@gmail.com</p>
+        </div>
+
+        <div class="footer-column">
+          <h4>Lokasi</h4>
+          <p>📍 Jl.Pasirgede Raya,Cianjur</p>
+        </div>
+
+        <div class="footer-column">
+          <h4>Jam Operasional</h4>
+          <p>Senin - Jumat<br />07:00 – 20:00 WIB</p>
+          <br />
+          <p>Sabtu - Minggu<br />07:00 – 21:00 WIB</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 Serba Serbi Nasi Bu Henny — Semua Hak Dilindungi</p>
+      </div>
+    </footer>
+
+    <script>
+      /*========== MENYIMPAN FOTO TIAP TIAP VARIABEL ===========*/
+      const dataMenu = {
+        utama: [
+          {
+            img: "Produk/Img/hidangan/makanan1.jpeg",
+            title: "Ikan Bakar",
+            price: "Rp 28.000",
+          },
+          {
+            img: "Produk/Img/hidangan/makanan2.jpeg",
+            title: "Perkedel",
+            price: "Rp 5.000",
+          },
+          {
+            img: "Produk/Img/hidangan/makanan3.jpeg",
+            title: "Cumi Bakar",
+            price: "Rp 32.000",
+          },
+          {
+            img: "Produk/Img/hidangan/makanan4.jpeg",
+            title: "Ayam Goreng Serundeng",
+            price: "Rp 22.000",
+          },
+          {
+            img: "Produk/Img/hidangan/makanan5.jpeg",
+            title: "Sop Iga",
+            price: "Rp 38.000",
+          },
+          {
+            img: "Produk/Img/hidangan/makanan6.jpeg",
+            title: "Sambal Joss",
+            price: "Rp 4.000",
+          },
+          {
+            img: "Produk/Img/hidangan/makanan7.jpeg",
+            title: "Ayam Goreng",
+            price: "Rp 20.000",
+          },
+          {
+            img: "Produk/Img/hidangan/makanan8.jpeg",
+            title: "Sop Ayam",
+            price: "Rp 18.000",
+          },
+          {
+            img: "Produk/Img/hidangan/makanan9.jpeg",
+            title: "Gule Sapi",
+            price: "Rp 35.000",
+          },
+          {
+            img: "Produk/Img/hidangan/makanan10.jpeg",
+            title: "Nasi Goreng",
+            price: "Rp 15.000",
+          },
+          {
+            img: "Produk/Img/hidangan/makanan11.jpeg",
+            title: "Nasi Biasa",
+            price: "Rp 6.000",
+          },
+          {
+            img: "Produk/Img/hidangan/makanan12.jpeg",
+            title: "Nasi Kuning",
+            price: "Rp 100.000",
+          },
+        ],
+        paket: [
+          {
+            img: "Produk/Img/paket/paket1.jpeg",
+            title: "Paket 1",
+            price: "Rp 180.000",
+          },
+          {
+            img: "Produk/Img/paket/paket2.jpeg",
+            title: "Paket 2",
+            price: "Rp 200.000",
+          },
+          {
+            img: "Produk/Img/paket/paket3.jpeg",
+            title: "Paket 3",
+            price: "Rp 220.000",
+          },
+          {
+            img: "Produk/Img/paket/paket4.jpeg",
+            title: "Paket 4",
+            price: "Rp 240.000",
+          },
+          {
+            img: "Produk/Img/paket/paket5.jpeg",
+            title: "Paket 5",
+            price: "Rp 107.000",
+          },
+          {
+            img: "Produk/Img/paket/paket6.jpeg",
+            title: "Paket 6",
+            price: "Rp 280.000",
+          },
+        ],
+        minuman: [
+          {
+            img: "Produk/Img/minuman/minuman1.jpeg",
+            title: "Cappuccino",
+            price: "Rp 14.000",
+          },
+          {
+            img: "Produk/Img/minuman/minuman2.jpeg",
+            title: "Es Cendol",
+            price: "Rp 8.000",
+          },
+          {
+            img: "Produk/Img/minuman/minuman3.jpeg",
+            title: "Es Teh Manis",
+            price: "Rp 14.000",
+          },
+          {
+            img: "Produk/Img/minuman/minuman4.jpeg",
+            title: "Brown Sugar",
+            price: "Rp 5.000",
+          },
+          {
+            img: "Produk/Img/minuman/minuman5.jpeg",
+            title: "Kopi Hitam",
+            price: "Rp 7.000",
+          },
+          {
+            img: "Produk/Img/minuman/minuman6.jpeg",
+            title: "Es Jeruk Peras",
+            price: "Rp 8.000",
+          },
+        ],
+        camilan: [
+          {
+            img: "Produk/Img/cemilan/cemilan1.jpeg",
+            title: "Dimsum",
+            price: "Rp 12.000",
+          },
+          {
+            img: "Produk/Img/cemilan/cemilan2.jpeg",
+            title: "Cireng",
+            price: "Rp 6.000",
+          },
+          {
+            img: "Produk/Img/cemilan/cemilan3.jpeg",
+            title: "Pisang Keju",
+            price: "Rp 12.000",
+          },
+          {
+            img: "Produk/Img/cemilan/cemilan4.jpeg",
+            title: "Nugget Goreng",
+            price: "Rp 10.000",
+          },
+          {
+            img: "Produk/Img/cemilan/cemilan5.jpeg",
+            title: "Tahu Crispy",
+            price: "Rp 6.000",
+          },
+          {
+            img: "Produk/Img/cemilan/cemilan6.jpeg",
+            title: "Onde-Onde",
+            price: "Rp 5.000",
+          },
+        ],
+      };
+
+      function renderMenu(list) {
+        const container = document.querySelector(".menu-grid");
+        container.innerHTML = "";
+
+        list.forEach((item) => {
+          container.innerHTML += `
+            <div class="card">
+              <img src="${item.img}" />
+              <div class="card-info">
+                <div>
+                  <div class="card-title">${item.title}</div>
+                  <div class="card-price">${item.price}</div>
+                </div>
+                <div class="add-btn">🛒</div>
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      document.querySelectorAll(".menu-item").forEach((item) => {
+        item.addEventListener("click", () => {
+          let text = item.innerText.toLowerCase();
+
+          if (text.includes("hidangan")) renderMenu(dataMenu.utama);
+          else if (text.includes("paket")) renderMenu(dataMenu.paket);
+          else if (text.includes("minuman")) renderMenu(dataMenu.minuman);
+          else if (text.includes("camilan")) renderMenu(dataMenu.camilan);
+        });
+      });
+
+      renderMenu(dataMenu.utama);
+
+      /*============ HAMBERGER ============*/
+      const hamburger = document.getElementById("hamburger");
+      const mobileMenu = document.getElementById("mobileMenu");
+
+      hamburger.addEventListener("click", () => {
+        mobileMenu.classList.add("active");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+          mobileMenu.classList.remove("active");
+        }
+      });
+    </script>
+  </body>
+</html>

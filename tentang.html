@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Warung Nasi Serba Serbi</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+  /* === Variabel warna utama untuk kemudahan editing warna global === */
+  :root{
+    --orange:#f27202;
+    --orange-2:#ff8a2b;
+    --dark:#111;
+    --muted:#6b6b6b;
+    --white:#ffffff;
+  }
+
+  /*=========setting dasar elemen============= */
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:"Poppins",sans-serif;
+    color:var(--dark);
+    background:linear-gradient(180deg,#fff 0%, #fffaf6 50%, #fff 100%);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    overflow-x:hidden;
+    background: #fff7ef;
+  }
+
+  /* Style bagian Navbar */
+
+ nav {
+        width: 100%;
+        padding: 20px 50px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: transparent;
+      }
+      .logo-area {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-left: 20px;
+      }
+      .logo {
+        height: 60px;
+        width: 60px;
+        border-radius: 50%;
+        background: #fff;
+        padding: 5px;
+        box-shadow: 0 0 20px rgba(255, 166, 0, 0.6),
+          0 0 40px rgba(255, 166, 0, 0.3);
+      }
+      .brand-text {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #f27202;
+        transition: color 0.5s ease;
+        line-height: 1.3;
+      }
+
+      .nav-menu {
+        display: flex;
+        gap: 40px;
+        list-style: none;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .nav-menu li a {
+        color: #111;
+        text-decoration: none;
+        font-weight: bold;
+        background-color: #ff7a00;
+        padding: 8px 15px;
+        border-radius: 50px;
+        transition: 0.3s ease;
+        display: inline-block;
+        transform: scale(1);
+      }
+
+      .nav-menu li a:hover {
+        transform: scale(1.25);
+        background-color: #ff9a2a;
+        color: #fff;
+      }
+
+      .nav-menu li a.active {
+        transform: scale(1.25);
+        background-color: #ff9a2a;
+        color: #fff;
+      }
+
+      .auth-buttons {
+        display: flex;
+        gap: 15px;
+      }
+      .auth-buttons a {
+        padding: 10px 18px;
+        border-radius: 30px;
+        font-weight: 700;
+        text-decoration: none;
+      }
+      .signin {
+        color: #111;
+      }
+      .signin:hover {
+        background-color: #ff7a00;
+        border-radius: 50px;
+        transition: 1s;
+      }
+      .signup {
+        background-color: #ff7a00;
+        color: white;
+      }
+
+      /* ===================== RESPONSIVE TABLET ===================== */
+      @media (max-width: 992px) {
+        nav {
+          padding: 15px 30px;
+        }
+
+        .nav-menu {
+          gap: 20px;
+        }
+      }  
+
+      /* ======== HAMBURGER MOBILE & TABLET MENU ======= */
+      .hamburger {
+        display: none;
+        flex-direction: column;
+        gap: 5px;
+        cursor: pointer;
+        z-index: 2001;
+      }
+      .hamburger span {
+        width: 30px;
+        height: 4px;
+        background: #ff7a00;
+        border-radius: 3px;
+      }
+
+      .mobile-menu {
+        position: fixed;
+        top: 0;
+        right: -300px;
+        width: 260px;
+        height: 100vh;
+        background: #ff7a00;
+        transition: 0.4s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 60px;
+        z-index: 2000;
+      }
+
+      .nav-menu-mobile {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+        text-align: center;
+      }
+      .nav-menu-mobile li {
+        width: 100%;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+        padding-bottom: 10px;
+      }
+
+      .nav-menu-mobile li a {
+        color: white;
+        font-size: 18px;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      .auth-mobile {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 27vh;
+      }
+      .auth-mobile a {
+        color: white;
+        padding: 10px 20px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 15px;
+        text-align: center;
+        text-decoration: none;
+      }
+
+      @media (max-width: 992px) {
+        .hamburger {
+          display: flex;
+        }
+        .nav-menu,
+        .auth-buttons {
+          display: none !important;
+        }
+        .mobile-menu.active {
+          right: 0;
+        }
+        
+      }
+
+
+      /* ==================== MAIN ==================== */
+ 
+  .container{
+    max-width:1200px;
+    margin:0 auto;
+    padding:0 6%;
+    position:relative;
+    z-index:2
+  }
+
+  /* HERO / NARRATIVE */
+  .hero{
+    margin-top:0px;
+    padding-top:130px 0 40px;
+    display:flex;
+    gap:48px;
+    align-items:center;
+    justify-content:space-between;
+  }
+
+  .hero-left{
+    flex:0 0 58%
+  }
+  
+  .title{
+    font-family:"Playfair Display",serif;
+    font-size:44px;color:var(--dark);line-height:1.02;margin-bottom:18px;
+    text-shadow:0 6px 20px rgba(242,114,2,0.03);
+    margin-top: 25px;
+  }
+
+ /* RESPONSIVE MOBILE */
+@media (max-width: 600px) {
+  .title {
+    margin-top: 0 !important;
+  }
+  .hero, .hero-left {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
+}
+
+/* RESPONSIVE TABLET */
+      @media (max-width: 992px) {
+       .title {
+    margin-top: 0 !important;
+  }
+  .hero, .hero-left {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
+      }
+
+  .lead{
+    color:var(--muted);
+    font-size:17px;
+    line-height:1.75
+  }
+  .type-line{
+    font-weight:600;
+    color:#333;
+    margin-top:18px;
+    min-height:48px
+  }
+
+  /* hero right image card with floating effect */
+  .hero-right{
+    flex:0 0 38%;
+    display:flex;
+    justify-content:flex-end
+  }
+  .card{
+    width:360px;height:400px;
+    border-radius:22px;
+    background:linear-gradient(180deg,#fff,#fff8f2);
+    box-shadow:0 20px 50px rgba(0,0,0,0.12);position:relative;
+    overflow:hidden;transform:translateY(0);
+    transition:transform .45s cubic-bezier(.2,.9,.25,1)
+  }
+  .card:hover{
+    transform:translateY(-10px)
+  }
+  .card img{
+    width:100%;
+    height:100%;
+    object-fit:cover;display:block
+  }
+
+  /* Floating micro elements */
+  .floating{
+    position:absolute;width:70px;
+    height:70px;
+    border-radius:14px;
+    background:var(--white);
+    box-shadow:0 10px 30px rgba(0,0,0,0.08);
+    display:flex;
+    align-items:center;justify-content:center;
+    transform:translateY(0);
+  }
+  .f1{
+    left:-18%;
+    top:10%;
+    opacity:.95
+  }
+  .f2{
+    left:10%;
+    top:-10%
+  }
+  .f3{
+    right:-6%;
+    bottom:6%
+  }
+  @keyframes floaty{0%{transform:translateY(0)}50%{transform:translateY(-10px)}100%{transform:translateY(0)}}
+  .floating{animation:floaty 4s ease-in-out infinite}
+
+  /* SECTION: HIGHLIGHTS */
+  .highlights{
+    display:flex;
+    gap:20px;
+    justify-content:space-between;
+    margin-top:26px;
+    margin-bottom: 26px;
+  }
+  .stat{
+    background:#fff;border-radius:16px;
+    padding:18px 20px;
+    width:30%;box-shadow:0 10px 30px rgba(0,0,0,0.06);
+    text-align:center;
+  }
+  .stat h3{
+    font-size:28px;
+    color:var(--dark);
+    margin-bottom:6px
+  }
+  .stat p{color:var(--muted);font-weight:600}
+
+  /* Review section: auto transition block */
+  .stage{
+    position: relative; overflow: hidden;
+    margin-top:36px;overflow:hidden;
+    border-radius:18px;background:#fff;
+    padding:28px 20px;
+    box-shadow:0 14px 40px rgba(0,0,0,0.06);
+  }
+  .stage-inner{
+    display:flex;
+    gap:20px;align-items:center;
+    flex-wrap:nowrap;transition:transform .7s ease
+  }
+  .review-card{
+    min-width:280px;
+    background:linear-gradient(180deg,#fff,#fffbf6);
+    padding:18px;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,0.07);
+  }
+  .review-card h4{
+    color:var(--orange);
+    margin-bottom:6px
+  }
+  .review-card p{
+    color:#444;
+    font-size:14px;
+    line-height:1.6}
+  .review-meta{
+    display:flex;
+    align-items:center;
+    gap:10px;margin-top:12px}
+  /* small controls */
+  .controls{
+    display:flex;
+    gap:10px;align-items:center;
+    position:absolute;right:18px;
+    top:18px
+  }
+  .dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:rgba(0,0,0,0.12);cursor:pointer
+  }
+  .dot.active{
+    background:var(--orange)
+  }
+
+
+
+/* === DELIVERY SECTION === */
+.delivery-info {
+    padding: 70px 20px;
+    background: #ffffff;
+    text-align: center;
+}
+
+.delivery-info h2 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #f27202;
+    margin-bottom: 40px;
+    font-family:"Playfair Display",serif;
+}
+
+.delivery-logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 35px;
+}
+
+.logo-box.static {
+    width: 170px;
+    background: #fff7f0;
+    border: 3px solid #f27202;
+    border-radius: 18px;
+    padding: 20px 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    transition: 0.4s ease;
+}
+
+/* hover lebih lembut */
+.logo-box.static:hover {
+    transform: translateY(-8px) scale(1.04);
+    background: #ffe5d1;
+    box-shadow: 0 12px 26px rgba(0,0,0,0.12);
+}
+
+.logo-box.static img {
+    width: 85px;
+    height: 85px;
+    object-fit: contain;
+    margin-bottom: 12px;
+}
+
+/* text nama resto */
+.resto-name {
+    margin: 0;
+    font-weight: 600;
+    color: #f27202;
+    font-size: 15px;
+}
+
+/* style panah komentar */
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  background: white;
+  color: var(--orange);
+  font-size: 22px;
+  font-weight: bold;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  cursor: pointer;
+  z-index: 10;
+  transition: 0.25s ease;
+}
+
+.arrow:hover {
+  background: var(--orange);
+  color: white;
+  transform: translateY(-50%) scale(1.08);
+}
+
+.arrow.prev { 
+  left: -7px; 
+}
+.arrow.next { 
+  right: -7px;
+}
+
+/* ==================== KEUNGGULAN RESTO ==================== */
+.advantages-simple {
+  padding: 60px 20px;
+  background: #faf8f5;
+}
+
+.advantages-simple h2 {
+  text-align: center;
+  font-family: "Playfair Display", serif;
+  font-size: 2.2rem;
+  margin-bottom: 40px;
+  color: #f27202;
+  position: relative;
+}
+
+.adv-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.adv-list li {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.adv-list li:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+.adv-list img {
+  width: 55px;
+  height: 55px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.adv-list span {
+  font-size: 1rem;
+  color: #333;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+
+/* ==================== RESPONSIVE ==================== */
+@media(max-width:600px){
+  .adv-list li {
+    flex-direction: row;
+    gap: 12px;
+    font-size: 15px;
+  }
+
+  .adv-list li img {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+
+ /* ==================== RESPONSIVE ==================== */
+  @media(max-width:1000px){
+    .hero{
+      flex-direction:column;
+      padding:120px 5% 40px
+    }
+    .hero-left{
+      width:100%
+    }
+    .hero-right{
+      width:100%;
+      justify-content:center;
+      margin-top:0px
+    }
+    .card{
+      width:320px;
+      height:280px
+    }
+    .highlights{
+      flex-direction:column
+    }
+    .stat{
+      width:100%
+    }
+    .stage-inner{
+      gap:14px
+    }
+  }
+  @media(max-width:520px){
+    .title{font-size:28px}
+    .nav-inner{padding:0 12px}
+    nav a{font-size:14px}
+  }
+
+/* ==================== FOOTER ==================== */
+  .footer {
+  background: #222;
+  color: #eee;
+  padding: 5px 10px;
+  font-family: "Poppins", sans-serif;
+}
+
+.footer-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.footer-column h3,
+.footer-column h4 {
+  color: #ff7a00;
+  margin-bottom: 12px;
+}
+
+.footer-bottom {
+  margin-top: 30px;
+  border-top: 1px solid rgba(255,255,255,0.15);
+  padding-top: 8px;
+  text-align: center;
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+ 
+</style>
+</head>
+<body>
+
+<!-- Wave soft background -->
+<div class="wave-wrap" aria-hidden="true"><div class="big-wave"></div></div>
+
+ <!-- ================= NAVBAR ================= -->
+    <nav>
+      <div class="logo-area">
+        <img src="Produk/Img/logo/logo.png" alt="Logo" class="logo" />
+        <span class="brand-text">Serba Serbi Nasi<br />Bu Henny</span>
+      </div>
+      <ul class="nav-menu">
+        <li><a href="Beranda.html">Beranda</a></li>
+        <li><a href="tentang.html">Tentang</a></li>
+        <li><a href="menu.html">Menu</a></li>
+        <li><a href="staf.html">Staf</a></li>
+        <li><a href="Pesan.html">Pesan</a></li>
+      </ul>
+      <div class="auth-buttons">
+        <a class="signin" href="#login">Sign In</a>
+        <a class="signup" href="#daftar">Sign Up</a>
+      </div>
+      <!-- ================= NAVBAR HUMBERGER ================= -->
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <div class="mobile-menu" id="mobileMenu">
+        <ul class="nav-menu-mobile">
+          <li><a href="Beranda.html">Beranda</a></li>
+          <li><a href="tentang.html">Tentang</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="staf.html">Staf</a></li>
+          <li><a href="Pesan.html">Pesan</a></li>
+        </ul>
+
+        <div class="auth-mobile">
+          <a class="signin" href="#login">Sign In</a>
+          <a class="signup" href="#daftar">Sign Up</a>
+        </div>
+      </div>
+    </nav>
+
+<main class="container">
+  <section class="hero" id="hero">
+    <div class="hero-left">
+      <h1 class="title">Kenikmatan Masakan Rumahan Di Setiap Suapan</span></h1>
+      <p class="lead">Warung Nasi Serba Serbi Bu Henny hadir membawa warisan cita rasa turun-temurun, diolah dari bahan pilihan yang dijaga mutunya. Resto ini berdiri sejak <strong>2024</strong>, kami memegang prinsip bahwa setiap hidangan bukan sekadar makanan melainkan kehangatan yang ingin kami bagi dalam setiap suapan.</p>
+      
+      <!-- Typing / narrative area -->
+      <div class="type-line" id="typeLine" aria-live="polite"></div>
+
+      <!-- highlights -->
+      <div class="highlights" style="margin-top:26px">
+        <div class="stat"><h3 id="count-served"></h3><p>Porsi Terjual</p></div>
+        <div class="stat"><h3>4.9★</h3><p>Rating Rata-rata</p></div>
+        <div class="stat"><h3>50+</h3><p>Menu & Varian</p></div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="card" aria-hidden="true">
+        <img src="Produk/Img/hidangan/nasi_liwet.jpg" alt="Gambar Makanan">
+      </div>
+
+  </section>
+
+<section class="delivery-info">
+    <h2>Kini Kami Hadir di Platform Delivery Favorit Anda</h2>
+
+    <div class="delivery-logos">
+
+        <div class="logo-box static">
+            <img src="Produk/Img/logo/logo_goFood.png" alt="GoFood">
+            <p class="resto-name">Serba Serbi Nasi Bu Henny</p>
+        </div>
+         <div class="logo-box static">
+            <img src="Produk/Img/logo/logo-shopeeFood.png" alt="ShopeeFood">
+            <p class="resto-name">Serba Serbi Nasi Bu Henny</p>
+        </div>
+
+        <div class="logo-box static">
+            <img src="Produk/Img/logo/logo-grabFood.png" alt="GrabFood">
+            <p class="resto-name">Serba Serbi Nasi Bu Henny</p>
+        </div>
+
+    </div>
+</section>
+
+  <!-- reviews -->
+  <section class="stage" id="stage">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+      <strong style="font-size:18px;color:var(--dark)">Review Pelanggan</strong>
+      <div class="controls" id="controls"></div>
+    </div>
+
+    <!-- tombol scroll kiri/kanan -->
+  <button class="arrow prev" id="prevBtn">&#10094;</button>
+  <button class="arrow next" id="nextBtn">&#10095;</button>
+
+  
+    <div class="stage-inner" id="stageInner" aria-live="polite">
+      <!-- Review cards -->
+      <div class="review-card">
+        <h4>GoFood — Dita</h4>
+        <p>"Masakannya enak, selalu hangat dan porsinya pas. Sambal juara!"</p>
+        <div class="review-meta"><div style="font-size:13px;color:var(--muted)">Dipesan via GoFood • 11 Juli 2025</div></div>
+      </div>
+
+      <div class="review-card">
+        <h4>GrabFood — Rian</h4>
+        <p>"Cepat dikirim, rasa tetap konsisten. Favorit keluarga kami."</p>
+        <div class="review-meta"><div style="font-size:13px;color:var(--muted)">Dipesan via GrabFood • 20 Juni 2025</div></div>
+      </div>
+
+      <div class="review-card">
+        <h4>ShopeeFood — Lestari</h4>
+        <p>"Worth it! Harga pas, rasa menenangkan seperti masakan rumah."</p>
+        <div class="review-meta"> <div style="font-size:13px;color:var(--muted)">Dipesan via ShopeeFood • 5 Juli 2025</div></div>
+      </div>
+
+      <div class="review-card">
+        <h4>GoFood — Budi</h4>
+        <p>"Top service & tasty! Nasi goreng komplitnya recommended."</p>
+        <div class="review-meta"><div style="font-size:13px;color:var(--muted)">Dipesan • 27 Feb 2025</div></div>
+      </div>
+
+      <div class="review-card">
+        <h4>GrabFood — Nur</h4>
+        <p>"Selalu puas. Pedasnya pas dan lauknya selalu fresh."</p>
+        <div class="review-meta"> <div style="font-size:13px;color:var(--muted)">Dipesan • 10 Juli 2025</div></div>
+      </div>
+
+      <div class="review-card">
+      <h4>GoFood — Sari</h4>
+      <p>"Menu lengkap dan porsinya besar, cocok untuk makan siang cepat. Rasanya konsisten enak."</p>
+      <div class="review-meta"><div style="font-size:13px;color:var(--muted)">Dipesan via GoFood • 12 Juli 2025</div></div>
+      </div>
+
+      <div class="review-card">
+      <h4>ShopeeFood — Andi</h4>
+      <p>"Makanan datang tepat waktu, hangat, dan lauknya selalu fresh. Favorit saya setiap minggu!"</p>
+      <div class="review-meta"><div style="font-size:13px;color:var(--muted)">Dipesan via ShopeeFood • 15 Juli 2025</div></div>
+      </div>
+
+      <div class="review-card">
+      <h4>GrabFood — Rina</h4>
+      <p>"Rasa seperti masakan rumahan, sambalnya mantap, dan kemasannya rapi. Recommended banget."</p>
+      <div class="review-meta"><div style="font-size:13px;color:var(--muted)">Dipesan via GrabFood • 18 Juli 2025</div></div>
+      </div>
+
+      <div class="review-card">
+      <h4>GoFood — Tono</h4>
+      <p>"Selalu puas dengan kualitas makanannya. Nasi pulen dan lauk fresh. Layanan delivery cepat."</p>
+      <div class="review-meta"><div style="font-size:13px;color:var(--muted)">Dipesan via GoFood • 20 Juli 2025</div></div>
+      </div>
+
+      <div class="review-card">
+      <h4>ShopeeFood — Maya</h4>
+      <p>"Harga terjangkau, rasa mantap, dan porsinya pas. Cocok untuk keluarga atau sendiri."</p>
+      <div class="review-meta"><div style="font-size:13px;color:var(--muted)">Dipesan via ShopeeFood • 22 Juli 2025</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KEUNGGULAN RESTO -->
+<section class="advantages-simple">
+  <div class="container">
+    <h2>Keunggulan Kami</h2>
+    <ul class="adv-list">
+      <li>
+        <img src="Produk/Img/logo/logo_halal.jpg" alt="Halal">
+        <span>100% Halal — Semua menu dijamin halal dan aman dikonsumsi semua kalangan.</span>
+      </li>
+      <li>
+        <img src="Produk/Img/logo/makanan_fresh.jpg" alt="Fresh">
+        <span>Bahan Fresh Setiap Hari — Diolah langsung agar rasanya selalu maksimal.</span>
+      </li>
+      <li>
+        <img src="Produk/Img/logo/bintang5.jpg" alt="Terbaik">
+        <span>Resto Terbaik di Cianjur — Cita rasa autentik dengan pelayanan ramah.</span>
+      </li>
+      <li>
+        <img src="Produk/Img/logo/logo_menu.jpg" alt="Menu Variasi">
+        <span>Varian Menu Lengkap — Lebih dari 50 menu & varian untuk semua selera.</span>
+      </li>
+    </ul>
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="footer-container">
+    <!-- Brand -->
+    <div class="footer-column">
+      <h3 class="footer-brand">Serba Serbi Nasi Bu Henny</h3>
+      <p>Cita rasa rumahan yang selalu dirindukan.</p>
+    </div>
+
+    <!-- Kontak -->
+    <div class="footer-column">
+      <h4>Hubungi Kami</h4>
+      <p>📞 +62 8572 0261 642</p>
+      <p>✉️ serbaserbi@gmail.com</p>
+    </div>
+
+    <!-- Alamat -->
+    <div class="footer-column">
+      <h4>Lokasi</h4>
+      <p>📍 Jl.Pasirgede Raya,Cianjur</p>
+    </div>
+
+    <!-- Jam Operasional -->
+    <div class="footer-column">
+      <h4>Jam Operasional</h4>
+      <p>Senin - Jumat<br>07:00 – 20:00 WIB</p> <br>
+      <p>Sabtu - Minggu<br>07:00 – 21:00 WIB</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 Serba Serbi Nasi Bu Henny — Semua Hak Dilindungi</p>
+  </div>
+</footer>
+
+
+<script>
+
+  // Saat scroll header akan hilang
+let lastScroll = 0;
+const header = document.querySelector("nav");
+
+window.addEventListener("scroll", () => {
+  let currentScroll = window.scrollY;
+
+  if (currentScroll > lastScroll && currentScroll > 0) {
+    header.classList.add("hide");
+  } else {
+    header.classList.remove("hide");
+  }
+
+  lastScroll = currentScroll;
+});
+
+
+// text berjalan
+const typeLine = document.getElementById('typeLine');
+const typeLines = [
+  "Kami mengolah resep keluarga dengan cinta dan bahan pilihan.",
+  "Setiap hidangan diracik agar terasa seperti pulang ke rumah.",
+  "Terbuka untuk semua kalangan — lezat, sehat, terjangkau."
+];
+
+let tIndex = 0;
+let charIndex = 0;
+let typingSpeed = 30;
+let pauseBetweenLines = 1600;
+
+function typeLoop(){
+
+  /* ================= JS HAMBURGER ================= */
+      const hamburger = document.getElementById("hamburger");
+      const mobileMenu = document.getElementById("mobileMenu");
+
+      hamburger.addEventListener("click", () => {
+        mobileMenu.classList.add("active");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+          mobileMenu.classList.remove("active");
+        }
+      });
+
+  if(tIndex >= typeLines.length){ 
+    return;
+  }
+  const current = typeLines[tIndex];
+  if(charIndex < current.length){
+    typeLine.textContent = current.slice(0, charIndex+1) + '▌';
+    charIndex++;
+    setTimeout(typeLoop, typingSpeed);
+  } else {
+    typeLine.textContent = current;
+    // jeda lalu baris berikutnya (atau akhir)
+    setTimeout(()=>{
+      tIndex++;
+      charIndex=0;
+      if(tIndex < typeLines.length){
+        typeLine.textContent = '';
+        typeLoop();
+      } else {
+        // setelah selesai mengetik semua baris, mulai transisi otomatis ke ulasan
+      }
+    }, pauseBetweenLines);
+  }
+}
+// Mulai efek ketik
+typeLoop();
+
+ // animasi porsi terjual
+
+function countUp(el, end, duration=1800){
+  let start = 0;
+  const range = end - start;
+  const stepTime = Math.abs(Math.floor(duration / range));
+  let current = start;
+  const timer = setInterval(()=>{
+    current +=  Math.max(1, Math.floor(range/40));
+    if(current >= end){
+      el.textContent = end.toLocaleString();
+      clearInterval(timer);
+    } else {
+      el.textContent = current.toLocaleString();
+    }
+  }, stepTime);
+}
+
+// pergerakan angka porsi terjual
+document.addEventListener('DOMContentLoaded', ()=>{ countUp(document.getElementById('count-served'), 55000, 1300); });
+
+const stageInner = document.getElementById("stageInner");
+const reviews = Array.from(stageInner.children);
+const controlsWrap = document.getElementById("controls");
+
+let currentSlide = 0;
+let autoTimer = null;
+
+// fungsi auto geser ke kanan komentar
+function autoSlide() {
+  currentSlide = (currentSlide + 1) % reviews.length;
+  goTo(currentSlide);
+}
+
+// membuat titik kecil pada komentar
+reviews.forEach((r,i)=>{
+  const dot = document.createElement('div');
+  dot.classList.add('dot');
+  if(i===0) dot.classList.add('active');
+  dot.addEventListener('click', ()=>{ goTo(i); resetAuto(); });
+  controlsWrap.appendChild(dot);
+});
+
+const dots = Array.from(document.querySelectorAll('.dot'));
+
+function goTo(i){
+  currentSlide = i;
+  const x = i * (reviews[0].getBoundingClientRect().width + 20);
+  stageInner.style.transform = `translateX(-${x}px)`;
+  dots.forEach(d=>d.classList.remove('active'));
+  dots[i].classList.add('active');
+}
+
+// Tombol panah
+document.getElementById('prevBtn').addEventListener('click', () => {
+  currentSlide = (currentSlide - 1 + reviews.length) % reviews.length;
+  goTo(currentSlide);
+  resetAuto();
+});
+
+document.getElementById('nextBtn').addEventListener('click', () => {
+  currentSlide = (currentSlide + 1) % reviews.length;
+  goTo(currentSlide);
+  resetAuto();
+});
+
+const currentPage = window.location.pathname.split("/").pop();
+      const menuLinks = document.querySelectorAll(".nav-menu li a");
+
+      menuLinks.forEach((link) => {
+        if (link.getAttribute("href") === currentPage) {
+          link.classList.add("active");
+        }
+      });
+
+
+</script>
+</body>
+</html>
