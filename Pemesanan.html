@@ -67,6 +67,126 @@
             transform: scale(1.05);
         }
 
+        /* NOTIFICATION STYLES */
+        .notification-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .notification-overlay.active {
+            display: flex;
+        }
+
+        .notification {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: slideUp 0.3s ease;
+        }
+
+        .notification-icon {
+            font-size: 3rem;
+            color: #ff7a00;
+            margin-bottom: 15px;
+        }
+
+        .notification.success .notification-icon {
+            color: #4CAF50;
+        }
+
+        .notification.warning .notification-icon {
+            color: #ff9800;
+        }
+
+        .notification.error .notification-icon {
+            color: #f44336;
+        }
+
+        .notification h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.4rem;
+        }
+
+        .notification p {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .notification-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .notification-btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            min-width: 100px;
+        }
+
+        .notification-btn.confirm {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .notification-btn.confirm:hover {
+            background: #45a049;
+        }
+
+        .notification-btn.cancel {
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        .notification-btn.cancel:hover {
+            background: #e0e0e0;
+        }
+
+        .notification-btn.ok {
+            background: #2196F3;
+            color: white;
+        }
+
+        .notification-btn.ok:hover {
+            background: #0b7dda;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         /* ACTION TOOLBAR */
         .action-toolbar {
             background: white;
@@ -952,6 +1072,20 @@
         </a>
     </nav>
 
+    <!-- NOTIFICATION OVERLAY -->
+    <div class="notification-overlay" id="notificationOverlay">
+        <div class="notification" id="notification">
+            <div class="notification-icon">
+                <i class="fas fa-info-circle"></i>
+            </div>
+            <h3 id="notificationTitle">Notification</h3>
+            <p id="notificationMessage">This is a notification message.</p>
+            <div class="notification-buttons" id="notificationButtons">
+                <!-- Buttons will be added dynamically -->
+            </div>
+        </div>
+    </div>
+
     <!-- ACTION TOOLBAR -->
     <div class="action-toolbar" id="actionToolbar" style="display: none;">
         <div class="select-all">
@@ -962,7 +1096,7 @@
             <button class="action-btn edit-btn" onclick="openEditMenuModal()">
                 <i class="fas fa-exchange-alt"></i> Ganti Menu
             </button>
-            <button class="action-btn delete-btn" onclick="deleteSelectedItems()">
+            <button class="action-btn delete-btn" onclick="showDeleteConfirmation()">
                 <i class="fas fa-trash"></i> Hapus
             </button>
             <button class="action-btn add-btn" onclick="openAddMenuModal()">
@@ -1265,6 +1399,70 @@
         let replacementItems = {}; // Menu pengganti yang dipilih
         let itemsToReplace = {}; // Menu yang akan diganti
 
+        // NOTIFICATION FUNCTIONS
+        function showNotification(title, message, type = 'info', options = {}) {
+            const overlay = document.getElementById('notificationOverlay');
+            const notification = document.getElementById('notification');
+            const titleEl = document.getElementById('notificationTitle');
+            const messageEl = document.getElementById('notificationMessage');
+            const buttonsEl = document.getElementById('notificationButtons');
+            
+            // Set notification type
+            notification.className = 'notification ' + type;
+            
+            // Set icon based on type
+            const iconEl = notification.querySelector('.notification-icon i');
+            switch(type) {
+                case 'success':
+                    iconEl.className = 'fas fa-check-circle';
+                    break;
+                case 'warning':
+                    iconEl.className = 'fas fa-exclamation-triangle';
+                    break;
+                case 'error':
+                    iconEl.className = 'fas fa-exclamation-circle';
+                    break;
+                default:
+                    iconEl.className = 'fas fa-info-circle';
+            }
+            
+            // Set content
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+            
+            // Clear existing buttons
+            buttonsEl.innerHTML = '';
+            
+            // Add buttons based on options
+            if (options.confirm) {
+                // Confirmation dialog with OK and Cancel
+                buttonsEl.innerHTML = `
+                    <button class="notification-btn cancel" onclick="hideNotification()">Batal</button>
+                    <button class="notification-btn confirm" onclick="${options.onConfirm}">OK</button>
+                `;
+            } else {
+                // Simple notification with OK button
+                buttonsEl.innerHTML = `<button class="notification-btn ok" onclick="hideNotification()">OK</button>`;
+            }
+            
+            // Show notification
+            overlay.classList.add('active');
+            
+            // Auto-hide if specified
+            if (options.autoHide) {
+                setTimeout(() => {
+                    hideNotification();
+                    if (options.onClose) {
+                        options.onClose();
+                    }
+                }, options.duration || 3000);
+            }
+        }
+        
+        function hideNotification() {
+            document.getElementById('notificationOverlay').classList.remove('active');
+        }
+        
         // Format currency
         function formatCurrency(amount) {
             return 'Rp ' + amount.toLocaleString('id-ID');
@@ -1413,7 +1611,7 @@
                         <span>Total Pembayaran</span>
                         <span>${formatCurrency(total)}</span>
                     </div>
-                    <button class="checkout-btn" onclick="checkout()">
+                    <button class="checkout-btn" onclick="showCheckoutNotification()">
                         <i class="fas fa-credit-card"></i> Lanjutkan ke Pembayaran
                     </button>
                     <p style="text-align: center; margin-top: 15px; font-size: 0.9rem; color: #666;">
@@ -1443,7 +1641,11 @@
         // Open edit menu modal (GANTI MENU)
         function openEditMenuModal() {
             if (selectedItems.size === 0) {
-                alert('Pilih menu terlebih dahulu yang ingin diganti!');
+                showNotification(
+                    'Peringatan', 
+                    'Pilih menu terlebih dahulu yang ingin diganti!', 
+                    'warning'
+                );
                 return;
             }
             
@@ -1649,16 +1851,31 @@
             const itemsToReplaceCount = Object.keys(itemsToReplace).length;
             
             if (replacementCount === 0) {
-                alert('Pilih menu pengganti terlebih dahulu!');
+                showNotification(
+                    'Peringatan',
+                    'Pilih menu pengganti terlebih dahulu!',
+                    'warning'
+                );
                 return;
             }
             
             if (replacementCount > itemsToReplaceCount) {
-                if (!confirm(`Anda memilih ${replacementCount} menu pengganti untuk ${itemsToReplaceCount} menu yang akan diganti. Menu tambahan akan ditambahkan ke keranjang. Lanjutkan?`)) {
-                    return;
-                }
+                showNotification(
+                    'Konfirmasi',
+                    `Anda memilih ${replacementCount} menu pengganti untuk ${itemsToReplaceCount} menu yang akan diganti. Menu tambahan akan ditambahkan ke keranjang. Lanjutkan?`,
+                    'warning',
+                    {
+                        confirm: true,
+                        onConfirm: 'confirmReplaceItems()'
+                    }
+                );
+                return;
             }
             
+            confirmReplaceItems();
+        }
+
+        function confirmReplaceItems() {
             // Hapus menu lama dari keranjang
             Object.keys(itemsToReplace).forEach(itemName => {
                 delete cart[itemName];
@@ -1681,7 +1898,15 @@
             closeEditMenuModal();
             updateCartDisplay();
             
-            alert(`${itemsToReplaceCount} menu berhasil diganti dengan ${replacementCount} menu baru!`);
+            showNotification(
+                'Berhasil',
+                `${Object.keys(itemsToReplace).length} menu berhasil diganti dengan ${Object.keys(replacementItems).length} menu baru!`,
+                'success',
+                {
+                    autoHide: true,
+                    duration: 3000
+                }
+            );
         }
 
         // Open add menu modal
@@ -1846,7 +2071,11 @@
             const selectedCount = Object.keys(selectedMenuItems).length;
             
             if (selectedCount === 0) {
-                alert('Pilih menu terlebih dahulu!');
+                showNotification(
+                    'Peringatan',
+                    'Pilih menu terlebih dahulu!',
+                    'warning'
+                );
                 return;
             }
             
@@ -1866,31 +2095,68 @@
             closeAddMenuModal();
             updateCartDisplay();
             
-            alert(`${selectedCount} menu berhasil ditambahkan ke keranjang!`);
+            showNotification(
+                'Berhasil',
+                `${selectedCount} menu berhasil ditambahkan ke keranjang!`,
+                'success',
+                {
+                    autoHide: true,
+                    duration: 3000
+                }
+            );
+        }
+
+        // Show delete confirmation
+        function showDeleteConfirmation() {
+            if (selectedItems.size === 0) {
+                showNotification(
+                    'Peringatan',
+                    'Pilih item terlebih dahulu!',
+                    'warning'
+                );
+                return;
+            }
+            
+            showNotification(
+                'Konfirmasi',
+                `Hapus ${selectedItems.size} item yang dipilih?`,
+                'warning',
+                {
+                    confirm: true,
+                    onConfirm: 'deleteSelectedItems()'
+                }
+            );
         }
 
         // Delete selected items
         function deleteSelectedItems() {
-            if (selectedItems.size === 0) {
-                alert('Pilih item terlebih dahulu!');
-                return;
-            }
+            selectedItems.forEach(itemName => {
+                delete cart[itemName];
+            });
             
-            if (confirm(`Hapus ${selectedItems.size} item yang dipilih?`)) {
-                selectedItems.forEach(itemName => {
-                    delete cart[itemName];
-                });
-                
-                selectedItems.clear();
-                localStorage.setItem('cart', JSON.stringify(cart));
-                updateCartDisplay();
-            }
+            selectedItems.clear();
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartDisplay();
+            
+            showNotification(
+                'Berhasil',
+                'Item berhasil dihapus dari keranjang!',
+                'success',
+                {
+                    autoHide: true,
+                    duration: 3000
+                }
+            );
         }
 
-        // Checkout function
-        function checkout() {
+        // Show checkout notification
+        function showCheckoutNotification() {
             if (Object.keys(cart).length === 0) {
-                alert('Keranjang Anda masih kosong!');
+                showNotification(
+                    'Peringatan',
+                    'Keranjang Anda masih kosong!',
+                    'warning'
+                );
                 return;
             }
             
@@ -1901,8 +2167,18 @@
             };
             localStorage.setItem('checkout', JSON.stringify(checkoutData));
             
-            alert('Pesanan berhasil disimpan! Arahkan ke halaman pembayaran...');
-            // window.location.href = 'pembayaran.html';
+            showNotification(
+                'Berhasil',
+                'Pesanan berhasil disimpan! Arahkan ke halaman pembayaran...',
+                'success',
+                {
+                    autoHide: true,
+                    duration: 3000,
+                    onClose: function() {
+                        // window.location.href = 'pembayaran.html';
+                    }
+                }
+            );
         }
 
         // Calculate total function
