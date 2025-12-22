@@ -13,7 +13,7 @@ if (isset($_POST['login'])) {
         $_SESSION['login'] = true;
         $_SESSION['nama'] = $data['nama'];
 
-        header("Location: Beranda.html");
+        header("Location: Beranda.php");
         exit;
     } else {
         echo "<script>

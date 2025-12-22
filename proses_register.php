@@ -17,7 +17,8 @@ if (isset($_POST['register'])) {
 
     mysqli_query(
         $conn,
-        "INSERT INTO users VALUES (NULL,'$nama','$email','$password')"
+        "INSERT INTO users (nama_lengkap, email, password)
+         VALUES ('$nama','$email','$password')"
     );
 
     echo "<script>
