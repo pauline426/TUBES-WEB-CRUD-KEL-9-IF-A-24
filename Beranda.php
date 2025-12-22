@@ -439,7 +439,7 @@ if (!isset($_SESSION['login'])) {
         <span class="brand-text">Serba Serbi Nasi<br />Bu Henny</span>
       </div>
       <ul class="nav-menu">
-        <li><a href="Beranda.html">Beranda</a></li>
+        <li><a href="Beranda.php">Beranda</a></li>
         <li><a href="tentang.html">Tentang</a></li>
         <li><a href="menu.html">Menu</a></li>
         <li><a href="staf.html">Staf</a></li>
@@ -458,7 +458,7 @@ if (!isset($_SESSION['login'])) {
 
       <div class="mobile-menu" id="mobileMenu">
         <ul class="nav-menu-mobile">
-          <li><a href="Beranda.html">Beranda</a></li>
+          <li><a href="Beranda.php">Beranda</a></li>
           <li><a href="tentang.html">Tentang</a></li>
           <li><a href="menu.html">Menu</a></li>
           <li><a href="staf.html">Staf</a></li>

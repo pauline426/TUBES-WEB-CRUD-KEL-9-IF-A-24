@@ -8,8 +8,7 @@
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-/>
-
+    />
 
     <style>
       body {
@@ -120,19 +119,19 @@
       }
 
       .sidebar {
-    background: #fff1dd;
-    padding: 30px;
-    border-radius: 0 40px 0 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    position: sticky;
-    top: 0;
-    align-self: flex-start;
-    height: 100vh;
-    overflow-y: auto;
-    z-index: 100;
-    }
+        background: #fff1dd;
+        padding: 30px;
+        border-radius: 0 40px 0 0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        position: sticky;
+        top: 0;
+        align-self: flex-start;
+        height: 100vh;
+        overflow-y: auto;
+        z-index: 100;
+      }
 
       .sidebar h1 {
         font-size: 28px;
@@ -179,6 +178,7 @@
       }
 
       /*=============== KERANJANG STYLE ================*/
+<<<<<<< HEAD
 .keranjang {
     margin-top: 40px;
     background: #ff7a00;
@@ -343,7 +343,32 @@
         transform: translateY(0);
     }
 }
+=======
+      .keranjang {
+        margin-top: 40px;
+        background: #ff7a00;
+        color: white;
+        padding: 15px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2);
+      }
 
+      .keranjang:hover {
+        transform: translateY(-3px);
+        background: #ff9a2a;
+        box-shadow: 0 6px 15px rgba(255, 122, 0, 0.3);
+      }
+>>>>>>> 503e5071e67b3affc9526c2693fbeb14d6a2532d
+
+      .keranjang i {
+        font-size: 24px;
+      }
 
       /*=============== SEARCH BAR MODERN ============*/
       .content {
@@ -659,34 +684,33 @@
       }
 
       .qty-control {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
 
-.qty-control button {
-  width: 26px;
-  height: 26px;
-  border: none;
-  border-radius: 6px;
-  background: #ff7a00;
-  color: white;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-}
+      .qty-control button {
+        width: 26px;
+        height: 26px;
+        border: none;
+        border-radius: 6px;
+        background: #ff7a00;
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+      }
 
-.qty-control button:hover {
-  background: #ff9a2a;
-}
+      .qty-control button:hover {
+        background: #ff9a2a;
+      }
 
-.qty-control .qty {
-  min-width: 16px;
-  text-align: center;
-  font-weight: bold;
-  color: #7a3e00;
-}
-
+      .qty-control .qty {
+        min-width: 16px;
+        text-align: center;
+        font-weight: bold;
+        color: #7a3e00;
+      }
 
       @media (max-width: 992px) {
         .hamburger {
@@ -701,7 +725,6 @@
         }
       }
     </style>
-    
   </head>
 
   <body>
@@ -728,7 +751,7 @@
       </div>
 
       <ul class="nav-menu">
-        <li><a href="Beranda.html">Beranda</a></li>
+        <li><a href="Beranda.php">Beranda</a></li>
         <li><a href="tentang.html">Tentang</a></li>
         <li><a href="menu.html" class="active">Menu</a></li>
         <li><a href="staf.html">Staf</a></li>
@@ -776,7 +799,11 @@
 
         <div class="keranjang" onclick="window.location.href='Pemesanan.html'">
           <i class="fa-solid fa-cart-shopping"></i>
+<<<<<<< HEAD
           <span>Keranjang</span>
+=======
+          <a href="Pemesanan.html"></a>
+>>>>>>> 503e5071e67b3affc9526c2693fbeb14d6a2532d
         </div>
       </div>
 
@@ -826,6 +853,7 @@
       </div>
     </footer>
 
+<<<<<<< HEAD
 <script>
 /* ================= NOTIFICATION FUNCTIONS ================= */
 function showNotification(title, message, type = 'info', options = {}) {
@@ -962,6 +990,182 @@ function renderMenu(list, showNoResult = false) {
   list.forEach(item => {
     const quantity = cart[item.title] || 0;
     container.innerHTML += `
+=======
+    <script>
+      /* ================= DATA MENU ================= */
+      const dataMenu = {
+        utama: [
+          {
+            img: "Produk/Img/hidangan/makanan1.jpeg",
+            title: "Ikan Bakar",
+            price: "Rp 28.000",
+          },
+          {
+            img: "Produk/Img/hidangan/makanan2.jpeg",
+            title: "Perkedel",
+            price: "Rp 5.000",
+          },
+          {
+            img: "Produk/Img/hidangan/makanan3.jpeg",
+            title: "Cumi Bakar",
+            price: "Rp 32.000",
+          },
+          {
+            img: "Produk/Img/hidangan/makanan4.jpeg",
+            title: "Ayam Goreng Serundeng",
+            price: "Rp 22.000",
+          },
+          {
+            img: "Produk/Img/hidangan/makanan5.jpeg",
+            title: "Sop Iga",
+            price: "Rp 38.000",
+          },
+          {
+            img: "Produk/Img/hidangan/makanan6.jpeg",
+            title: "Sambal Joss",
+            price: "Rp 4.000",
+          },
+          {
+            img: "Produk/Img/hidangan/makanan7.jpeg",
+            title: "Ayam Goreng",
+            price: "Rp 20.000",
+          },
+          {
+            img: "Produk/Img/hidangan/makanan8.jpeg",
+            title: "Sop Ayam",
+            price: "Rp 18.000",
+          },
+          {
+            img: "Produk/Img/hidangan/makanan9.jpeg",
+            title: "Gule Sapi",
+            price: "Rp 35.000",
+          },
+          {
+            img: "Produk/Img/hidangan/makanan10.jpeg",
+            title: "Nasi Goreng",
+            price: "Rp 15.000",
+          },
+          {
+            img: "Produk/Img/hidangan/makanan11.jpeg",
+            title: "Nasi Biasa",
+            price: "Rp 6.000",
+          },
+          {
+            img: "Produk/Img/hidangan/makanan12.jpeg",
+            title: "Nasi Kuning",
+            price: "Rp 100.000",
+          },
+        ],
+        paket: [
+          {
+            img: "Produk/Img/paket/paket1.jpeg",
+            title: "Paket 1",
+            price: "Rp 180.000",
+          },
+          {
+            img: "Produk/Img/paket/paket2.jpeg",
+            title: "Paket 2",
+            price: "Rp 200.000",
+          },
+          {
+            img: "Produk/Img/paket/paket3.jpeg",
+            title: "Paket 3",
+            price: "Rp 220.000",
+          },
+          {
+            img: "Produk/Img/paket/paket4.jpeg",
+            title: "Paket 4",
+            price: "Rp 240.000",
+          },
+          {
+            img: "Produk/Img/paket/paket5.jpeg",
+            title: "Paket 5",
+            price: "Rp 107.000",
+          },
+          {
+            img: "Produk/Img/paket/paket6.jpeg",
+            title: "Paket 6",
+            price: "Rp 280.000",
+          },
+        ],
+        minuman: [
+          {
+            img: "Produk/Img/minuman/minuman1.jpeg",
+            title: "Cappuccino",
+            price: "Rp 14.000",
+          },
+          {
+            img: "Produk/Img/minuman/minuman2.jpeg",
+            title: "Es Cendol",
+            price: "Rp 8.000",
+          },
+          {
+            img: "Produk/Img/minuman/minuman3.jpeg",
+            title: "Es Teh Manis",
+            price: "Rp 14.000",
+          },
+          {
+            img: "Produk/Img/minuman/minuman4.jpeg",
+            title: "Brown Sugar",
+            price: "Rp 5.000",
+          },
+          {
+            img: "Produk/Img/minuman/minuman5.jpeg",
+            title: "Kopi Hitam",
+            price: "Rp 7.000",
+          },
+          {
+            img: "Produk/Img/minuman/minuman6.jpeg",
+            title: "Es Jeruk Peras",
+            price: "Rp 8.000",
+          },
+        ],
+        camilan: [
+          {
+            img: "Produk/Img/cemilan/cemilan1.jpeg",
+            title: "Dimsum",
+            price: "Rp 12.000",
+          },
+          {
+            img: "Produk/Img/cemilan/cemilan2.jpeg",
+            title: "Cireng",
+            price: "Rp 6.000",
+          },
+          {
+            img: "Produk/Img/cemilan/cemilan3.jpeg",
+            title: "Pisang Keju",
+            price: "Rp 12.000",
+          },
+          {
+            img: "Produk/Img/cemilan/cemilan4.jpeg",
+            title: "Nugget Goreng",
+            price: "Rp 10.000",
+          },
+          {
+            img: "Produk/Img/cemilan/cemilan5.jpeg",
+            title: "Tahu Crispy",
+            price: "Rp 6.000",
+          },
+          {
+            img: "Produk/Img/cemilan/cemilan6.jpeg",
+            title: "Onde-Onde",
+            price: "Rp 5.000",
+          },
+        ],
+      };
+
+      /* ================= STORAGE ================= */
+      localStorage.removeItem("cart");
+      let cart = {};
+
+      /* ================= RENDER MENU ================= */
+      function renderMenu(list) {
+        const container = document.querySelector(".menu-grid");
+        container.innerHTML = "";
+
+        list.forEach((item) => {
+          container.innerHTML += `
+>>>>>>> 503e5071e67b3affc9526c2693fbeb14d6a2532d
       <div class="card">
         <img src="${item.img}" alt="${item.title}">
         <div class="card-info">
@@ -977,8 +1181,9 @@ function renderMenu(list, showNoResult = false) {
         </div>
       </div>
     `;
-  });
+        });
 
+<<<<<<< HEAD
   initQtyButtons();
 }
 
@@ -1090,13 +1295,18 @@ function initQtyButtons() {
           );
         }
         saveCart();
+=======
+        initQtyButtons();
+>>>>>>> 503e5071e67b3affc9526c2693fbeb14d6a2532d
       }
-    };
-  });
 
-  updateSidebarCart();
-}
+      /* ================= + / - LOGIC ================= */
+      function initQtyButtons() {
+        document.querySelectorAll(".qty-control").forEach((control) => {
+          const title = control.dataset.title;
+          const qtySpan = control.querySelector(".qty");
 
+<<<<<<< HEAD
 /* ================= GET ALL MENU ITEMS ================= */
 function getAllMenuItems() {
   return [
@@ -1163,6 +1373,58 @@ document.addEventListener("DOMContentLoaded", function() {
   document.getElementById("searchInput").focus();
 });
 </script>
+=======
+          qtySpan.textContent = cart[title] || 0;
 
+          control.querySelector(".plus").onclick = () => {
+            cart[title] = (cart[title] || 0) + 1;
+            qtySpan.textContent = cart[title];
+            saveCart();
+          };
+
+          control.querySelector(".minus").onclick = () => {
+            if (cart[title] > 0) {
+              cart[title]--;
+              qtySpan.textContent = cart[title];
+              if (cart[title] === 0) delete cart[title];
+              saveCart();
+            }
+          };
+        });
+
+        updateSidebarCart();
+      }
+
+      /* ================= SAVE CART ================= */
+      function saveCart() {
+        localStorage.setItem("cart", JSON.stringify(cart));
+        updateSidebarCart();
+      }
+
+      /* ================= BADGE KERANJANG ================= */
+      function updateSidebarCart() {
+        const total = Object.values(cart).reduce((a, b) => a + b, 0);
+        const icon = document.querySelector(".keranjang i");
+>>>>>>> 503e5071e67b3affc9526c2693fbeb14d6a2532d
+
+        if (total > 0) icon.setAttribute("data-count", total);
+        else icon.removeAttribute("data-count");
+      }
+
+      /* ================= SIDEBAR FILTER ================= */
+      document.querySelectorAll(".menu-item").forEach((item) => {
+        item.addEventListener("click", () => {
+          const text = item.innerText.toLowerCase();
+
+          if (text.includes("hidangan")) renderMenu(dataMenu.utama);
+          else if (text.includes("paket")) renderMenu(dataMenu.paket);
+          else if (text.includes("minuman")) renderMenu(dataMenu.minuman);
+          else if (text.includes("cemilan")) renderMenu(dataMenu.camilan);
+        });
+      });
+
+      /* ================= DEFAULT ================= */
+      renderMenu(dataMenu.utama);
+    </script>
   </body>
 </html>

@@ -10,7 +10,7 @@ if (isset($_POST['register'])) {
     if (mysqli_num_rows($cek) > 0) {
         echo "<script>
           alert('Email sudah terdaftar');
-          window.location='login.html';
+          window.location='login.php';
         </script>";
         exit;
     }
