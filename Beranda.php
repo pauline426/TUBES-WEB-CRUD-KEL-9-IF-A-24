@@ -1,3 +1,11 @@
+<?php
+session_start();
+if (!isset($_SESSION['login'])) {
+    header("Location: login.php");
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="id">
   <head>
@@ -476,10 +484,10 @@
         </button>
       </div>
       <img
-  id="hero-slide"
-  class="hero-img show"
-  src="Produk/Img/beranda_img/foto1.png"
-/>
+        id="hero-slide"
+        class="hero-img show"
+        src="Produk/Img/beranda_img/foto1.png"
+      />
     </section>
 
     <!-- ========== CARD MENU ========== -->
@@ -565,14 +573,13 @@
       typeEffect();
 
       /* ================= SLIDESHOW HERO ================= */
-     const paketImages = [
-      "Produk/Img/beranda_img/foto1.png",
-      "Produk/Img/beranda_img/foto2.png",
-      "Produk/Img/beranda_img/foto3.png",
-      "Produk/Img/beranda_img/foto4.png",
-      "Produk/Img/beranda_img/foto5.png",
-    ];
-
+      const paketImages = [
+        "Produk/Img/beranda_img/foto1.png",
+        "Produk/Img/beranda_img/foto2.png",
+        "Produk/Img/beranda_img/foto3.png",
+        "Produk/Img/beranda_img/foto4.png",
+        "Produk/Img/beranda_img/foto5.png",
+      ];
 
       let idxHero = 0;
       const heroImg = document.getElementById("hero-slide");
@@ -609,18 +616,18 @@
           "Produk/Img/hidangan/makanan12.jpeg",
         ],
         minuman: [
-            "Produk/Img/minuman/minuman1.jpeg",
-            "Produk/Img/minuman/minuman2.jpeg",
-            "Produk/Img/minuman/minuman3.jpeg",
-            "Produk/Img/minuman/minuman4.jpeg",
-            "Produk/Img/minuman/minuman5.jpeg",
-            "Produk/Img/minuman/minuman1.jpeg",
-            "Produk/Img/minuman/minuman2.jpeg",
-            "Produk/Img/minuman/minuman3.jpeg",
-            "Produk/Img/minuman/minuman5.jpeg",
-            "Produk/Img/minuman/minuman4.jpeg",
-            "Produk/Img/minuman/minuman6.jpeg",
-            "Produk/Img/minuman/minuman4.jpeg",
+          "Produk/Img/minuman/minuman1.jpeg",
+          "Produk/Img/minuman/minuman2.jpeg",
+          "Produk/Img/minuman/minuman3.jpeg",
+          "Produk/Img/minuman/minuman4.jpeg",
+          "Produk/Img/minuman/minuman5.jpeg",
+          "Produk/Img/minuman/minuman1.jpeg",
+          "Produk/Img/minuman/minuman2.jpeg",
+          "Produk/Img/minuman/minuman3.jpeg",
+          "Produk/Img/minuman/minuman5.jpeg",
+          "Produk/Img/minuman/minuman4.jpeg",
+          "Produk/Img/minuman/minuman6.jpeg",
+          "Produk/Img/minuman/minuman4.jpeg",
         ],
         cemilan: [
           "Produk/Img/cemilan/cemilan1.jpeg",
