@@ -285,23 +285,6 @@
             font-size: 1.1rem;
         }
 
-        .remove-btn {
-            color: #ff4444;
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            cursor: pointer;
-            padding: 5px;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .remove-btn:hover {
-            transform: scale(1.2);
-        }
-
         /* ORDER SUMMARY */
         .order-summary {
             background: white;
@@ -855,11 +838,6 @@
                 text-align: center;
             }
             
-            .remove-btn {
-                order: 5;
-                justify-content: center;
-            }
-            
             .action-btn {
                 padding: 8px 20px;
                 font-size: 13px;
@@ -1355,9 +1333,6 @@
                                 <button class="plus" onclick="updateQuantity('${itemName}', 1)">+</button>
                             </div>
                             <div class="item-total">${formatCurrency(itemTotal)}</div>
-                            <button class="remove-btn" onclick="removeItem('${itemName}')" title="Hapus item">
-                                <i class="fas fa-trash"></i>
-                            </button>
                         </div>
                     `;
                 }
@@ -1414,16 +1389,6 @@
             
             localStorage.setItem('cart', JSON.stringify(cart));
             updateCartDisplay();
-        }
-
-        // Remove item function
-        function removeItem(itemName) {
-            if (confirm(`Hapus ${itemName} dari keranjang?`)) {
-                delete cart[itemName];
-                selectedItems.delete(itemName);
-                localStorage.setItem('cart', JSON.stringify(cart));
-                updateCartDisplay();
-            }
         }
 
         // Open edit menu modal (GANTI MENU)
