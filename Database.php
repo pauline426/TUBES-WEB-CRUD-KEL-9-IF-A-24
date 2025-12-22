@@ -32,7 +32,7 @@ CREATE TABLE menu_paket (
 	  
 );
 
-INSERT INTO menu_paket (nama_paket, harga, isi_paket, gambar, status)
+INSERT INTO menu_paket (nama_paket, harga,stok, isi_paket, gambar, status)
 VALUES
 ('Paket 1', 180000, 10, 'Paket nasi dan lauk lengkap.', 'paket1.jpg', 'tersedia'),
 ('Paket 2', 200000, 10, 'Paket nasi dan lauk lengkap.', 'paket2.jpg', 'tersedia'),
@@ -51,7 +51,7 @@ CREATE TABLE minuman (
     status ENUM('tersedia','habis') DEFAULT 'tersedia'
 );
 
-INSERT INTO minuman (nama_minuman, harga, ukuran, gambar, status)
+INSERT INTO minuman (nama_minuman, harga,stok, ukuran, gambar, status)
 VALUES 
 ('Cappucino', 14000, 10, 'Kecil', 'Cappucino.jpg', 'tersedia'),
 ('Es Cendol', 8000, 10, 'Sedang', 'Es_Cendol.jpg', 'tersedia'),
@@ -70,7 +70,7 @@ CREATE TABLE cemilan (
     status ENUM('tersedia','habis') DEFAULT 'tersedia'
 );
 
-INSERT INTO cemilan (nama_cemilan, harga, deskripsi, gambar, status) VALUES
+INSERT INTO cemilan (nama_cemilan, harga,stok, deskripsi, gambar, status) VALUES
 ('Dimsum', 12000, 10, 'Dimsum ayam lezat disajikan dengan saus', 'dimsum.jpg', 'tersedia'),
 ('Cireng', 6000, 10, 'Cireng goreng renyah khas Bandung', 'cireng.jpg', 'tersedia'),
 ('Pisang Keju', 12000, 10, 'Pisang goreng dengan topping keju', 'pisang_keju.jpg', 'tersedia'),
