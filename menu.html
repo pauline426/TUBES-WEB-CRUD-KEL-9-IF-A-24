@@ -8,7 +8,8 @@
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-    />
+/>
+
 
     <style>
       body {
@@ -119,19 +120,19 @@
       }
 
       .sidebar {
-        background: #fff1dd;
-        padding: 30px;
-        border-radius: 0 40px 0 0;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        position: sticky;
-        top: 0;
-        align-self: flex-start;
-        height: 100vh;
-        overflow-y: auto;
-        z-index: 100;
-      }
+    background: #fff1dd;
+    padding: 30px;
+    border-radius: 0 40px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 100;
+    }
 
       .sidebar h1 {
         font-size: 28px;
@@ -343,9 +344,6 @@
     }
 }
 
-      .keranjang i {
-        font-size: 24px;
-      }
 
       /*=============== SEARCH BAR MODERN ============*/
       .content {
@@ -661,33 +659,34 @@
       }
 
       .qty-control {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
-      .qty-control button {
-        width: 26px;
-        height: 26px;
-        border: none;
-        border-radius: 6px;
-        background: #ff7a00;
-        color: white;
-        font-size: 18px;
-        font-weight: bold;
-        cursor: pointer;
-      }
+.qty-control button {
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 6px;
+  background: #ff7a00;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-      .qty-control button:hover {
-        background: #ff9a2a;
-      }
+.qty-control button:hover {
+  background: #ff9a2a;
+}
 
-      .qty-control .qty {
-        min-width: 16px;
-        text-align: center;
-        font-weight: bold;
-        color: #7a3e00;
-      }
+.qty-control .qty {
+  min-width: 16px;
+  text-align: center;
+  font-weight: bold;
+  color: #7a3e00;
+}
+
 
       @media (max-width: 992px) {
         .hamburger {
@@ -702,6 +701,7 @@
         }
       }
     </style>
+    
   </head>
 
   <body>
@@ -728,7 +728,7 @@
       </div>
 
       <ul class="nav-menu">
-        <li><a href="Beranda.php">Beranda</a></li>
+        <li><a href="Beranda.html">Beranda</a></li>
         <li><a href="tentang.html">Tentang</a></li>
         <li><a href="menu.html" class="active">Menu</a></li>
         <li><a href="staf.html">Staf</a></li>
@@ -825,7 +825,6 @@
         <p>© 2025 Serba Serbi Nasi Bu Henny — Semua Hak Dilindungi</p>
       </div>
     </footer>
-
 
 <script>
 /* ================= NOTIFICATION FUNCTIONS ================= */
@@ -978,7 +977,7 @@ function renderMenu(list, showNoResult = false) {
         </div>
       </div>
     `;
-        });
+  });
 
   initQtyButtons();
 }
@@ -1092,12 +1091,11 @@ function initQtyButtons() {
         }
         saveCart();
       }
+    };
+  });
 
-      /* ================= + / - LOGIC ================= */
-      function initQtyButtons() {
-        document.querySelectorAll(".qty-control").forEach((control) => {
-          const title = control.dataset.title;
-          const qtySpan = control.querySelector(".qty");
+  updateSidebarCart();
+}
 
 /* ================= GET ALL MENU ITEMS ================= */
 function getAllMenuItems() {
@@ -1166,24 +1164,5 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 
-        if (total > 0) icon.setAttribute("data-count", total);
-        else icon.removeAttribute("data-count");
-      }
-
-      /* ================= SIDEBAR FILTER ================= */
-      document.querySelectorAll(".menu-item").forEach((item) => {
-        item.addEventListener("click", () => {
-          const text = item.innerText.toLowerCase();
-
-          if (text.includes("hidangan")) renderMenu(dataMenu.utama);
-          else if (text.includes("paket")) renderMenu(dataMenu.paket);
-          else if (text.includes("minuman")) renderMenu(dataMenu.minuman);
-          else if (text.includes("cemilan")) renderMenu(dataMenu.camilan);
-        });
-      });
-
-      /* ================= DEFAULT ================= */
-      renderMenu(dataMenu.utama);
-    </script>
   </body>
 </html>
