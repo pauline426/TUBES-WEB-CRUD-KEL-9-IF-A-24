@@ -993,10 +993,6 @@ function searchMenu() {
     const activeCategory = document.querySelector('.menu-item.active').dataset.category;
     currentCategory = activeCategory;
     renderMenu(dataMenu[activeCategory]);
-    showNotification("Pencarian", "Silakan ketik menu yang ingin dicari.", "info", {
-      autoHide: true,
-      duration: 2000
-    });
     return;
   }
   
@@ -1016,10 +1012,6 @@ function searchMenu() {
   
   if (searchResults.length > 0) {
     renderMenu(searchResults, true);
-    showNotification("Hasil Pencarian", `Ditemukan ${searchResults.length} menu untuk "${searchTerm}"`, "success", {
-      autoHide: true,
-      duration: 3000
-    });
   } else {
     renderMenu([], true);
   }
@@ -1056,17 +1048,6 @@ function initQtyButtons() {
       cart[title] = (cart[title] || 0) + 1;
       qtySpan.textContent = cart[title];
       saveCart();
-      
-      // Tampilkan notifikasi
-      const item = getAllMenuItems().find(i => i.title === title);
-      if (item) {
-        showNotification(
-          "Ditambahkan ke Keranjang",
-          `${title} berhasil ditambahkan ke keranjang.`,
-          "success",
-          { autoHide: true, duration: 2000 }
-        );
-      }
     };
 
     control.querySelector(".minus").onclick = () => {
@@ -1075,19 +1056,6 @@ function initQtyButtons() {
         qtySpan.textContent = cart[title];
         if (cart[title] === 0) {
           delete cart[title];
-          showNotification(
-            "Dihapus dari Keranjang",
-            `${title} dihapus dari keranjang.`,
-            "info",
-            { autoHide: true, duration: 2000 }
-          );
-        } else {
-          showNotification(
-            "Dikurangi",
-            `Jumlah ${title} dikurangi.`,
-            "info",
-            { autoHide: true, duration: 2000 }
-          );
         }
         saveCart();
       }
