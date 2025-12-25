@@ -33,12 +33,17 @@ VALUES
 (1,'Ikan Bakar',28000,10,'Ikan bakar bumbu khas','ikan_bakar.jpg'),
 (1,'Perkedel',5000,10,'Perkedel kentang goreng gurih','Perkedel.jpg'),
 (1,'Cumi Bakar',32000,10,'Cumi bakar saus pedas manis','Cumi_bakar.jpg'),
-(1,'Ayam Goreng',25000,15,'Ayam goreng renyah','Ayam_Goreng.jpg'),
+(1,'Ayam Goreng Serundeng',22000,15,'Ayam goreng dengan taburan serundeng','Ayam_Goreng.jpg'),
 (1,'Sop Iga',38000,10,'Sop iga sapi hangat','Sop_Iga.jpg'),
 (1,'Sambal Joss',4000,10,'Sambal pedas manis','Sambal_Joss.jpg'),
 (1,'Ayam Goreng',20000,12,'Ayam goreng gurih','ayam_goreng.jpg'),
 (1,'Sop Ayam',18000,10,'Sop ayam bening','sop_ayam.jpg'),
-(1,'Gule Sapi',35000,7,'Gule sapi berbumbu','gule_sapi.jpg');
+(1,'Gule Sapi',35000,7,'Gule sapi berbumbu','gule_sapi.jpg'),
+(1, 'Nasi Goreng', 15000, 100, 'Nasi goreng khas warung', 'makanan10.jpeg'),
+(1, 'Nasi Biasa', 6000, 100, 'Nasi putih', 'Produk/Img/hidangan/makanan11.jpeg'),
+(1, 'Nasi Kuning', 100000, 100, 'Nasi kuning spesial', 'Produk/Img/hidangan/makanan12.jpeg');
+
+ 
 
 -- =========================
 -- TABEL MENU PAKET
@@ -83,7 +88,7 @@ CREATE TABLE minuman (
 INSERT INTO minuman
 (id_kategori, nama_minuman, harga, stok, ukuran, gambar, status)
 VALUES
-(3,'Cappucino',14000,10,'Kecil','Cappucino.jpg','tersedia'),
+(3,'Cappuccino',14000,10,'Kecil','Cappucino.jpg','tersedia'),
 (3,'Es Cendol',8000,10,'Sedang','Es_Cendol.jpg','tersedia'),
 (3,'Es Teh Manis',14000,10,'Besar','Es_Teh_Manis.jpg','habis'),
 (3,'Brown Sugar',5000,10,'Sedang','Brown_Sugar.jpg','tersedia'),
@@ -123,7 +128,6 @@ CREATE TABLE users (
     nama_lengkap VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- =========================
@@ -148,6 +152,7 @@ CREATE TABLE detail_pemesanan (
     FOREIGN KEY (id_minuman) REFERENCES minuman(id_minuman),
     FOREIGN KEY (id_cemilan) REFERENCES cemilan(id_cemilan)
 );
+
 
 
 -- =========================
