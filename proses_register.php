@@ -6,7 +6,7 @@ if (isset($_POST['register'])) {
     $email = $_POST['email'];
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-    $cek = mysqli_query($conn, "SELECT * FROM users WHERE email='$email'");
+    $cek = mysqli_query($koneksi, "SELECT * FROM users WHERE email='$email'");
     if (mysqli_num_rows($cek) > 0) {
         echo "<script>
           alert('Email sudah terdaftar');
@@ -16,13 +16,13 @@ if (isset($_POST['register'])) {
     }
 
     mysqli_query(
-        $conn,
+        $koneksi,
         "INSERT INTO users (nama_lengkap, email, password)
          VALUES ('$nama','$email','$password')"
     );
 
     echo "<script>
       alert('Registrasi berhasil, silakan login');
-      window.location='login.html';
+      window.location='login.php';
     </script>";
 }
