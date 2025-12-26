@@ -215,8 +215,8 @@ $total_all = $totalRow['total'] ?? 0;
         }
 
         /* ACTION TOOLBAR */
-                .action-toolbar {
-            display: none;
+            .action-toolbar {
+            display: flex;
             background: white;
             border-radius: 20px;
             padding: 20px 30px;
@@ -289,6 +289,67 @@ $total_all = $totalRow['total'] ?? 0;
             transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(255, 68, 68, 0.4);
         }
+
+        .menu-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.menu-item {
+    flex: 1 1 calc(33% - 10px);
+    background: #fff8ef;
+    border: 2px solid #ff7a00;
+    border-radius: 15px;
+    padding: 10px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+    .menu-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(255,122,0,0.3);
+    }
+
+    .menu-item span {
+        font-weight: bold;
+        margin-bottom: 8px;
+        text-align: center;
+        color: #7a3e00;
+    }
+
+    .menu-item .qty-control {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 5px;
+    }
+
+    .menu-item button {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: none;
+        background: #ff7a00;
+        color: white;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.2s;
+    }
+
+    .menu-item button:hover {
+        background: #ff9a2a;
+        transform: scale(1.1);
+    }
+
+    .menu-item .qty {
+        min-width: 20px;
+        text-align: center;
+    }
+
 
         .modal {
               display: none;
@@ -788,9 +849,8 @@ $total_all = $totalRow['total'] ?? 0;
                     <i class="fas fa-trash"></i> Hapus Terpilih
                 </button>
 
-                <button class="action-btn add-btn" onclick="openMenuModal()">
-                <i class="fas fa-plus"></i> Tambah Menu
-                </button>
+               <button id="btnTambahMenu">+ Tambah Menu</button>
+                <div id="menuTambahan" class="menu-list menu-cards" style="display:none;"></div>
 
             </div>
         </div>
@@ -839,14 +899,17 @@ $total_all = $totalRow['total'] ?? 0;
                         </div>
                     </div>
                     <div class="item-price">Rp <?= number_format($item['harga']) ?></div>
-                    <div class="qty-control">
-                        <button onclick="updateQuantity(<?= $item['id_detail'] ?>, -1)" 
-                                <?= $item['jumlah'] <= 1 ? 'disabled' : '' ?>>
-                            −
-                        </button>
-                        <span class="qty" id="qty-<?= $item['id_detail'] ?>"><?= $item['jumlah'] ?></span>
-                        <button onclick="updateQuantity(<?= $item['id_detail'] ?>, 1)">+</button>
+                   
+                   <div class="qty-control">
+                    <button class="minus-btn" data-id="<?= $item['id_detail'] ?>">−</button>
+                    <span class="qty" id="qty-<?= $item['id_detail'] ?>">
+                    <?= $item['jumlah'] ?>
+                    </span>
+                    <button class="plus-btn" data-id="<?= $item['id_detail'] ?>">+</button>
                     </div>
+
+
+
                     <div class="item-total" id="total-<?= $item['id_detail'] ?>">Rp <?= number_format($total) ?></div>
                     <div class="item-actions">
                         <a href="edit.php?id=<?= $item['id_detail'] ?>" class="action-link edit">
@@ -980,27 +1043,83 @@ $total_all = $totalRow['total'] ?? 0;
         function formatCurrency(amount) {
             return 'Rp ' + parseInt(amount).toLocaleString('id-ID');
         }
-        
-        // Calculate and update summary
+
+        // Menampilkan menu untuk fitur tambah menu
+       function tampilkanMenu(menuList) {
+        const container = document.getElementById("menuTambahan");
+        container.innerHTML = "";
+
+        menuList.forEach(menu => {
+            container.innerHTML += `
+            <div class="menu-item">
+                <span>${menu.nama}</span>
+                <span>Rp ${menu.harga}</span>
+
+                <div class="qty-control"
+                    data-nama="${menu.nama}"
+                    data-harga="${menu.harga}"
+                    data-tipe="${menu.tipe}">
+                <button class="minus" disabled>-</button>
+                <span class="qty">0</span>
+                <button class="plus">+</button>
+                </div>
+            </div>
+            `;
+        });
+
+        initQtyButtons();
+        }
+
+        function initQtyButtons() {
+        document.querySelectorAll('#menuTambahan .plus').forEach(btn => {
+            btn.addEventListener('click', () => {
+            const control = btn.parentElement;
+            const qtyEl = control.querySelector('.qty');
+            let qty = parseInt(qtyEl.textContent);
+
+            qty++;
+            qtyEl.textContent = qty;
+            control.querySelector('.minus').disabled = qty <= 0;
+            });
+        });
+
+        document.querySelectorAll('#menuTambahan .minus').forEach(btn => {
+            btn.addEventListener('click', () => {
+            const control = btn.parentElement;
+            const qtyEl = control.querySelector('.qty');
+            let qty = parseInt(qtyEl.textContent);
+
+            if (qty > 0) qty--;
+            qtyEl.textContent = qty;
+            btn.disabled = qty <= 0;
+            });
+        });
+        }
+
+
+
         function updateOrderSummary() {
             let subtotal = 0;
             let itemCount = 0;
-     
+
             document.querySelectorAll('.cart-item').forEach(item => {
                 const qty = parseInt(item.querySelector('.qty').textContent);
+                const priceText = item.querySelector('.item-price').textContent;
+                const price = parseInt(priceText.replace(/[^\d]/g, ''));
+
                 itemCount += qty;
+                subtotal += qty * price;
             });
 
-            
             const tax = subtotal * 0.1;
             const grandTotal = subtotal + 5000 + tax;
-            
+
             document.getElementById('totalItems').textContent = itemCount;
             document.getElementById('subtotal').textContent = formatCurrency(subtotal);
             document.getElementById('tax').textContent = formatCurrency(tax);
             document.getElementById('grandTotal').textContent = formatCurrency(grandTotal);
         }
-        
+
         // ITEM SELECTION FUNCTIONS
         function toggleSelection(itemId, checkbox) {
             const cartItem = document.getElementById('item-' + itemId);
@@ -1099,8 +1218,6 @@ $total_all = $totalRow['total'] ?? 0;
                     // Update order summary
                     updateOrderSummary();
                     
-                    // Show success notification
-                    showNotification('Berhasil', 'Jumlah berhasil diperbarui', 'success', true);
                 } else {
                     showNotification('Error', data.message, 'error');
                 }
@@ -1195,6 +1312,8 @@ $total_all = $totalRow['total'] ?? 0;
             }, 3000);
         }
 
+        // SELECT ALL
+
         function deleteSelectedItems() {
     if (selectedItems.size === 0) {
         showNotification(
@@ -1261,6 +1380,43 @@ function confirmDeleteSelected() {
     });
 
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  document.querySelectorAll('.plus-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      updateQuantity(btn.dataset.id, 1);
+    });
+  });
+
+  document.querySelectorAll('.minus-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      updateQuantity(btn.dataset.id, -1);
+    });
+  });
+
+  document.querySelectorAll('.cart-item').forEach(item => {
+  const qty = parseInt(item.querySelector('.qty').textContent);
+  const minusBtn = item.querySelector('.minus-btn');
+
+  if (qty <= 1) {
+    minusBtn.disabled = true;
+  }
+    });
+
+    document.getElementById("btnTambahMenu").addEventListener("click", () => {
+  fetch("get_menu.php?kategori=utama")
+    .then(res => res.json())
+    .then(data => {
+      tampilkanMenu(data);
+    });
+});
+
+
+
+
+});
+
 
         
     </script>
