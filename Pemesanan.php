@@ -2,7 +2,8 @@
 include 'koneksi.php';
 
 // Hitung total semua item
-$totalQuery = mysqli_query($koneksi, "SELECT SUM(jumlah * harga) as total FROM detail_pemesanan");
+$id_user = $_SESSION['id_user'] ?? 1;
+$totalQuery = mysqli_query($koneksi, "SELECT SUM(jumlah * harga) as total FROM detail_pemesanan WHERE id_user = $id_user");
 $totalRow = mysqli_fetch_assoc($totalQuery);
 $total_all = $totalRow['total'] ?? 0;
 ?>

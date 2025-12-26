@@ -1,6 +1,6 @@
 /* ================= VARIABEL GLOBAL ================= */
 let totalItemsInCart = 0;
-let currentCategory = "hidangan";
+let currentCategory = "utama";
 
 /* ================= DATA MENU ================= */
 const dataMenu = {
@@ -261,13 +261,14 @@ function drawMenu(list, cartData) {
 }
 
 
+
 /* ================= SIDEBAR FILTER ================= */
 document.querySelectorAll(".menu-item").forEach((item) => {
   item.addEventListener("click", () => {
     const text = item.innerText.toLowerCase();
 
     if (text.includes("hidangan")) {
-      currentCategory = "hidangan";
+      currentCategory = "utama";
       renderMenu(dataMenu.utama);
     } else if (text.includes("paket")) {
       currentCategory = "paket";
@@ -293,6 +294,50 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
+
+
+function initQtyButtons() {
+  document.querySelectorAll(".qty-control").forEach(control => {
+    const title = control.dataset.title;
+
+    const minusBtn = control.querySelector(".minus");
+    const plusBtn = control.querySelector(".plus");
+    const qtySpan = control.querySelector(".qty");
+
+    minusBtn.addEventListener("click", () => {
+      let qty = parseInt(qtySpan.textContent);
+      if (qty > 0) {
+        qty--;
+        qtySpan.textContent = qty;
+        updateCartServer(title, qty); // update ke server atau localStorage
+        if (qty === 0) minusBtn.disabled = true;
+      }
+    });
+
+    plusBtn.addEventListener("click", () => {
+      let qty = parseInt(qtySpan.textContent);
+      qty++;
+      qtySpan.textContent = qty;
+      minusBtn.disabled = false;
+      updateCartServer(title, qty); // update ke server atau localStorage
+    });
+  });
+}
+
+// Fungsi untuk update +- menu
+function updateCartServer(title, qty) {
+  fetch("update_jumlah.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ title, qty })
+  })
+  .then(res => res.json())
+  .then(() => {
+    updateCartBadge(); 
+  })
+  .catch(err => console.error(err));
+}
+
 
 /* ================= DEFAULT ================= */
 renderMenu(dataMenu.utama);
