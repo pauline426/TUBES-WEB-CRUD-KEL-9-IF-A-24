@@ -460,7 +460,7 @@ if (!isset($_SESSION['login'])) {
         <ul class="nav-menu-mobile">
           <li><a href="Beranda.php">Beranda</a></li>
           <li><a href="tentang.html">Tentang</a></li>
-          <li><a href="menu.html">Menu</a></li>
+          <li><a href="menu.php">Menu</a></li>
           <li><a href="staf.html">Staf</a></li>
           <li><a href="Pesan.html">Pesan</a></li>
         </ul>
