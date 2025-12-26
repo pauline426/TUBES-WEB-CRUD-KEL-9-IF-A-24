@@ -1,3 +1,7 @@
+/* ================= VARIABEL GLOBAL ================= */
+let totalItemsInCart = 0;
+let currentCategory = "hidangan";
+
 /* ================= DATA MENU ================= */
 const dataMenu = {
   utama: [
@@ -160,8 +164,54 @@ const dataMenu = {
   ],
 };
 
-/* ================= STATE ================= */
-let currentCategory = "hidangan";
+/* ================= FUNGSI UPDATE KERANJANG ================= */
+function updateCartBadge() {
+  fetch("get_cart.php")
+    .then(res => res.json())
+    .then(cartData => {
+      // Hitung total SEMUA item (jumlah kuantitas semua menu)
+      totalItemsInCart = Object.values(cartData).reduce((sum, qty) => {
+        return sum + parseInt(qty);
+      }, 0);
+      
+      console.log("Cart Data:", cartData);
+      console.log("Total Items:", totalItemsInCart);
+      
+      // Update badge
+      const keranjangDiv = document.querySelector('.keranjang');
+      let existingBadge = keranjangDiv.querySelector('.cart-badge');
+      
+      if (totalItemsInCart > 0) {
+        if (!existingBadge) {
+          const cartBadge = document.createElement('div');
+          cartBadge.className = 'cart-badge';
+          cartBadge.textContent = totalItemsInCart;
+          keranjangDiv.appendChild(cartBadge);
+          
+          keranjangDiv.classList.add('has-items');
+          
+          setTimeout(() => {
+            keranjangDiv.classList.remove('has-items');
+          }, 3000);
+        } else {
+          existingBadge.textContent = totalItemsInCart;
+          
+          existingBadge.style.transform = 'scale(1.2)';
+          setTimeout(() => {
+            existingBadge.style.transform = 'scale(1)';
+          }, 300);
+        }
+      } else {
+        if (existingBadge) {
+          existingBadge.remove();
+          keranjangDiv.classList.remove('has-items');
+        }
+      }
+    })
+    .catch(err => {
+      console.error('Gagal mengambil data keranjang:', err);
+    });
+}
 
 /* ================= RENDER MENU ================= */
 function renderMenu(list) {
@@ -170,15 +220,21 @@ function renderMenu(list) {
 
   fetch("get_cart.php")
     .then((res) => res.json())
-    .then((cartData) => drawMenu(list, cartData))
-    .catch(() => drawMenu(list, {}));
+    .then((cartData) => {
+      drawMenu(list, cartData);
+      updateCartBadge();
+    })
+    .catch(() => {
+      drawMenu(list, {});
+      updateCartBadge();
+    });
 }
 
 function drawMenu(list, cartData) {
   const container = document.querySelector(".menu-grid");
 
   list.forEach((item) => {
-    const qty = cartData[item.title] ?? 0;
+    const qty = cartData[item.title] ? parseInt(cartData[item.title]) : 0;
 
     container.innerHTML += `
       <div class="card">
@@ -192,7 +248,7 @@ function drawMenu(list, cartData) {
             data-title="${item.title}"
             data-harga="${item.price.replace(/[^0-9]/g, "")}"
             data-type="${currentCategory}">
-            <button class="minus">−</button>
+            <button class="minus" ${qty === 0 ? 'disabled' : ''}>−</button>
             <span class="qty">${qty}</span>
             <button class="plus">+</button>
           </div>
@@ -221,6 +277,8 @@ function initQtyButtons() {
 
 function sendToDB(nama, harga, aksi, qtySpan) {
   const type = qtySpan.closest(".qty-control").dataset.type;
+  const minusButton = qtySpan.closest(".qty-control").querySelector(".minus");
+  const currentQty = parseInt(qtySpan.textContent);
 
   fetch("cart_action.php", {
     method: "POST",
@@ -231,7 +289,52 @@ function sendToDB(nama, harga, aksi, qtySpan) {
   })
     .then((res) => res.json())
     .then((data) => {
-      qtySpan.textContent = data.jumlah;
+      const newQty = parseInt(data.jumlah);
+      qtySpan.textContent = newQty;
+      
+      if (newQty === 0) {
+        minusButton.disabled = true;
+      } else {
+        minusButton.disabled = false;
+      }
+      
+      // Langsung update badge tanpa perlu fetch ulang
+      const keranjangDiv = document.querySelector('.keranjang');
+      let existingBadge = keranjangDiv.querySelector('.cart-badge');
+      
+      // Hitung langsung berdasarkan aksi yang dilakukan
+      if (aksi === "plus") {
+        totalItemsInCart++;
+      } else if (aksi === "minus" && currentQty > 0) {
+        totalItemsInCart--;
+      }
+      
+      console.log("After action - Total Items:", totalItemsInCart);
+      
+      if (totalItemsInCart > 0) {
+        if (!existingBadge) {
+          const cartBadge = document.createElement('div');
+          cartBadge.className = 'cart-badge';
+          cartBadge.textContent = totalItemsInCart;
+          keranjangDiv.appendChild(cartBadge);
+          
+          keranjangDiv.classList.add('has-items');
+          setTimeout(() => {
+            keranjangDiv.classList.remove('has-items');
+          }, 3000);
+        } else {
+          existingBadge.textContent = totalItemsInCart;
+          existingBadge.style.transform = 'scale(1.2)';
+          setTimeout(() => {
+            existingBadge.style.transform = 'scale(1)';
+          }, 300);
+        }
+      } else {
+        if (existingBadge) {
+          existingBadge.remove();
+          keranjangDiv.classList.remove('has-items');
+        }
+      }
     });
 }
 
@@ -254,6 +357,18 @@ document.querySelectorAll(".menu-item").forEach((item) => {
       renderMenu(dataMenu.camilan);
     }
   });
+});
+
+/* ================= INISIALISASI SAAT HALAMAN DIMUAT ================= */
+document.addEventListener('DOMContentLoaded', function() {
+  updateCartBadge();
+  
+  const keranjangDiv = document.querySelector('.keranjang');
+  if (keranjangDiv) {
+    keranjangDiv.addEventListener('click', function() {
+      this.classList.remove('has-items');
+    });
+  }
 });
 
 /* ================= DEFAULT ================= */
