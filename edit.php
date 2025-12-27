@@ -8,9 +8,11 @@ $id_user = $_SESSION['id_user'] ?? 1;
 // PROSES UPDATE JIKA ADA POST
 if (isset($_POST['update'])) {
     $jumlah = intval($_POST['jumlah']);
+    $nama = mysqli_real_escape_string($koneksi, $_POST['nama']);
     
     mysqli_query($koneksi, "
         UPDATE detail_pemesanan SET
+        nama = '$nama',
         jumlah = $jumlah
         WHERE id_detail = $id_detail AND id_user = $id_user
     ");
@@ -28,6 +30,53 @@ $item = mysqli_fetch_assoc($query);
 if(!$item) {
     header('Location: Pemesanan.php');
     exit;
+}
+
+// GET DAFTAR SEMUA MENU DARI SEMUA TABEL
+$allMenus = [];
+
+// 1. Ambil dari hidangan_utama
+$queryHidangan = mysqli_query($koneksi, "SELECT id_hidangan, nama_menu, harga FROM hidangan_utama");
+while($menu = mysqli_fetch_assoc($queryHidangan)) {
+    $allMenus[] = [
+        'type' => 'hidangan',
+        'id' => $menu['id_hidangan'],
+        'nama' => $menu['nama_menu'],
+        'harga' => $menu['harga']
+    ];
+}
+
+// 2. Ambil dari menu_paket
+$queryPaket = mysqli_query($koneksi, "SELECT id_paket, nama_paket, harga FROM menu_paket");
+while($menu = mysqli_fetch_assoc($queryPaket)) {
+    $allMenus[] = [
+        'type' => 'paket',
+        'id' => $menu['id_paket'],
+        'nama' => $menu['nama_paket'],
+        'harga' => $menu['harga']
+    ];
+}
+
+// 3. Ambil dari minuman
+$queryMinuman = mysqli_query($koneksi, "SELECT id_minuman, nama_minuman, harga FROM minuman");
+while($menu = mysqli_fetch_assoc($queryMinuman)) {
+    $allMenus[] = [
+        'type' => 'minuman',
+        'id' => $menu['id_minuman'],
+        'nama' => $menu['nama_minuman'],
+        'harga' => $menu['harga']
+    ];
+}
+
+// 4. Ambil dari cemilan
+$queryCemilan = mysqli_query($koneksi, "SELECT id_cemilan, nama_cemilan, harga FROM cemilan");
+while($menu = mysqli_fetch_assoc($queryCemilan)) {
+    $allMenus[] = [
+        'type' => 'cemilan',
+        'id' => $menu['id_cemilan'],
+        'nama' => $menu['nama_cemilan'],
+        'harga' => $menu['harga']
+    ];
 }
 ?>
 
@@ -122,9 +171,33 @@ if(!$item) {
             outline: none;
         }
 
-        .readonly {
-            background: #f9f9f9;
-            cursor: not-allowed;
+        select.form-control {
+            cursor: pointer;
+            background: white;
+        }
+
+        .menu-type {
+            font-size: 0.85rem;
+            color: #666;
+            background: #f0f0f0;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-left: 10px;
+        }
+
+        .menu-info {
+            background: #fff8ef;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-top: 5px;
+            border: 1px solid #ffd8b4;
+            font-size: 0.9rem;
+        }
+
+        .menu-info .harga {
+            color: #ff7a00;
+            font-weight: bold;
+            margin-left: 10px;
         }
 
         .qty-control {
@@ -230,19 +303,6 @@ if(!$item) {
             background: #e0e0e0;
         }
 
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #4CAF50;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            display: none;
-            z-index: 1000;
-        }
-
         @media (max-width: 576px) {
             .container {
                 padding: 30px 20px;
@@ -269,26 +329,30 @@ if(!$item) {
     <div class="container">
         <div class="header">
             <h1 class="page-title">Edit Item</h1>
-            <p>Ubah jumlah item</p>
+            <p>Ubah menu dan jumlah</p>
         </div>
 
         <form method="post" id="editForm">
             <input type="hidden" name="id_detail" value="<?= $item['id_detail'] ?>">
             
             <div class="form-group">
-                <label>Nama Menu</label>
-                <input type="text" 
-                       class="form-control readonly" 
-                       value="<?= htmlspecialchars($item['nama']) ?>" 
-                       readonly>
-            </div>
-            
-            <div class="form-group">
-                <label>Harga Satuan</label>
-                <input type="text" 
-                       class="form-control readonly" 
-                       value="Rp <?= number_format($item['harga']) ?>" 
-                       readonly>
+                <label>Pilih Menu</label>
+                <select name="nama" id="menuSelect" class="form-control" required>
+                    <option value="">-- Pilih Menu --</option>
+                    <?php foreach($allMenus as $menu): 
+                        $selected = ($item['nama'] == $menu['nama']) ? 'selected' : '';
+                    ?>
+                    <option value="<?= htmlspecialchars($menu['nama']) ?>" 
+                            data-harga="<?= $menu['harga'] ?>"
+                            <?= $selected ?>>
+                        <?= htmlspecialchars($menu['nama']) ?> 
+                        <span class="menu-type"><?= ucfirst($menu['type']) ?></span>
+                    </option>
+                    <?php endforeach; ?>
+                </select>
+                <div class="menu-info">
+                    Harga terpilih: <span id="selectedPrice">Rp <?= number_format($item['harga']) ?></span>
+                </div>
             </div>
             
             <div class="form-group">
@@ -322,8 +386,9 @@ if(!$item) {
 
     <script>
         let quantity = <?= $item['jumlah'] ?>;
-        const price = <?= $item['harga'] ?>;
+        let price = <?= $item['harga'] ?>;
         
+        // Fungsi update harga total
         function updateTotalPrice() {
             const total = quantity * price;
             document.getElementById('totalPrice').textContent = 
@@ -332,10 +397,21 @@ if(!$item) {
             // Update hidden input
             document.getElementById('jumlahInput').value = quantity;
             
-            // Enable/disable decrease button
             document.getElementById('decreaseQty').disabled = quantity <= 1;
         }
         
+        // Event listener untuk dropdown menu
+        document.getElementById('menuSelect').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            if (selectedOption.value !== "") {
+                price = parseInt(selectedOption.getAttribute('data-harga'));
+                document.getElementById('selectedPrice').textContent = 
+                    'Rp ' + price.toLocaleString('id-ID');
+                updateTotalPrice();
+            }
+        });
+        
+        // Event listener untuk tombol jumlah
         document.getElementById('increaseQty').addEventListener('click', function() {
             quantity++;
             document.getElementById('quantity').textContent = quantity;
@@ -350,7 +426,7 @@ if(!$item) {
             }
         });
         
-        // Initialize total price
+        
         updateTotalPrice();
     </script>
 </body>

@@ -863,10 +863,10 @@ $item_count = count($items);
                     <span id="grandTotal">Rp <?= number_format($total_all + 5000 + ($total_all * 0.1)) ?></span>
                 </div>
                 <button class="checkout-btn" onclick="checkout()">
-                    <i class="fas fa-credit-card"></i> Lanjutkan ke Pembayaran
+                <i class="fas fa-check-circle"></i> Konfirmasi Pesanan
                 </button>
                 <p style="text-align: center; margin-top: 15px; font-size: 0.9rem; color: #666;">
-                    *Pesanan akan diproses setelah pembayaran
+                    *Pesanan akan diproses setelah konfimasi pesanan
                 </p>
             </div>
         <?php endif; ?>
@@ -1213,37 +1213,51 @@ $item_count = count($items);
         }
         
         // CHECKOUT FUNCTION
-        function checkout() {
-            const itemCount = document.querySelectorAll('.cart-item').length;
-            if (itemCount === 0) {
-                showNotification('Peringatan', 'Keranjang Anda masih kosong!', 'warning');
-                return;
-            }
+      // CHECKOUT FUNCTION - TANPA REDIRECT
+function checkout() {
+    const itemCount = document.querySelectorAll('.cart-item').length;
+    if (itemCount === 0) {
+        showNotification('Keranjang Kosong', 'Keranjang Anda masih kosong!', 'warning');
+        return;
+    }
+    
+    showLoading(true);
+    
+    fetch('checkout.php', {
+        method: 'POST'
+    })
+    .then(response => response.json())
+    .then(data => {
+        showLoading(false);
+        
+        if (data.status === 'success') {
+            // Hanya tampilkan notifikasi sukses
+            showNotification(
+                'Berhasil!', 
+                'Pesanan Anda berhasil dibuat dengan nomor pesanan: ' + data.order_id, 
+                'success'
+            );
             
-            showLoading(true);
-            
-            fetch('checkout.php', {
-                method: 'POST'
-            })
-            .then(response => response.json())
-            .then(data => {
-                showLoading(false);
-                
-                if (data.status === 'success') {
-                    showNotification('Berhasil', 'Pesanan berhasil dibuat!', 'success');
-                    setTimeout(() => {
-                        window.location.href = 'pembayaran.php?order_id=' + data.order_id;
-                    }, 2000);
-                } else {
-                    showNotification('Error', data.message, 'error');
-                }
-            })
-            .catch(error => {
-                showLoading(false);
-                showNotification('Error', 'Terjadi kesalahan saat checkout', 'error');
-                console.error('Error:', error);
+            // Kosongkan keranjang setelah sukses
+            document.querySelectorAll('.cart-item').forEach(item => {
+                item.remove();
             });
+            
+            // Tampilkan keranjang kosong
+            setTimeout(() => {
+                location.reload(); // Refresh halaman untuk tampilkan keranjang kosong
+            }, 2000);
+            
+        } else {
+            showNotification('Gagal', data.message || 'Terjadi kesalahan', 'error');
         }
+    })
+    .catch(error => {
+        showLoading(false);
+        showNotification('Error', 'Sistem sedang bermasalah. Coba lagi nanti.', 'error');
+        console.error('Error:', error);
+    });
+}
 
         // Initialize event listeners
         document.addEventListener('DOMContentLoaded', function() {
