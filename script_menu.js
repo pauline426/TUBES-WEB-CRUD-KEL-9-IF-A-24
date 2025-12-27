@@ -169,13 +169,15 @@ function updateCartBadge() {
   fetch("get_cart.php")
     .then(res => res.json())
     .then(cartData => {
-      // Hitung total SEMUA item (jumlah kuantitas semua menu)
-      totalItemsInCart = Object.values(cartData).reduce((sum, qty) => {
-        return sum + parseInt(qty);
-      }, 0);
-      
-      console.log("Cart Data:", cartData);
-      console.log("Total Items:", totalItemsInCart);
+      // Jika error (user belum login), skip
+      if (cartData.status === 'error') {
+        totalItemsInCart = 0;
+      } else {
+        // Hitung total SEMUA item
+        totalItemsInCart = Object.values(cartData).reduce((sum, qty) => {
+          return sum + parseInt(qty);
+        }, 0);
+      }
       
       // Update badge
       const keranjangDiv = document.querySelector('.keranjang');
@@ -247,7 +249,7 @@ function drawMenu(list, cartData) {
           <div class="qty-control"
             data-title="${item.title}"
             data-harga="${item.price.replace(/[^0-9]/g, "")}"
-            data-type="${currentCategory}">
+            data-type="${getTypeFromCategory(currentCategory)}">
             <button class="minus" ${qty === 0 ? 'disabled' : ''}>−</button>
             <span class="qty">${qty}</span>
             <button class="plus">+</button>
@@ -260,7 +262,16 @@ function drawMenu(list, cartData) {
   initQtyButtons();
 }
 
-
+/* ================= HELPER: KONVERSI KATEGORI KE TYPE ================= */
+function getTypeFromCategory(category) {
+  switch(category) {
+    case 'utama': return 'hidangan';
+    case 'paket': return 'paket';
+    case 'minuman': return 'minuman';
+    case 'camilan': return 'cemilan';
+    default: return 'hidangan';
+  }
+}
 
 /* ================= SIDEBAR FILTER ================= */
 document.querySelectorAll(".menu-item").forEach((item) => {
@@ -277,7 +288,7 @@ document.querySelectorAll(".menu-item").forEach((item) => {
       currentCategory = "minuman";
       renderMenu(dataMenu.minuman);
     } else if (text.includes("cemilan")) {
-      currentCategory = "cemilan";
+      currentCategory = "camilan";
       renderMenu(dataMenu.camilan);
     }
   });
@@ -295,49 +306,62 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-
+/* ================= FUNGSI UPDATE +- ================= */
 function initQtyButtons() {
   document.querySelectorAll(".qty-control").forEach(control => {
     const title = control.dataset.title;
+    const harga = control.dataset.harga;
+    const type = control.dataset.type;
 
     const minusBtn = control.querySelector(".minus");
     const plusBtn = control.querySelector(".plus");
     const qtySpan = control.querySelector(".qty");
 
+    // Tombol minus
     minusBtn.addEventListener("click", () => {
-      let qty = parseInt(qtySpan.textContent);
-      if (qty > 0) {
-        qty--;
-        qtySpan.textContent = qty;
-        updateCartServer(title, qty); // update ke server atau localStorage
-        if (qty === 0) minusBtn.disabled = true;
-      }
+      updateCart(title, harga, type, 'minus', qtySpan, minusBtn);
     });
 
+    // Tombol plus
     plusBtn.addEventListener("click", () => {
-      let qty = parseInt(qtySpan.textContent);
-      qty++;
-      qtySpan.textContent = qty;
-      minusBtn.disabled = false;
-      updateCartServer(title, qty); // update ke server atau localStorage
+      updateCart(title, harga, type, 'plus', qtySpan, minusBtn);
     });
   });
 }
 
-// Fungsi untuk update +- menu
-function updateCartServer(title, qty) {
-  fetch("update_jumlah.php", {
+function updateCart(title, harga, type, action, qtySpan, minusBtn) {
+  // Kirim ke cart_action.php
+  const formData = new FormData();
+  formData.append('nama', title);
+  formData.append('harga', harga);
+  formData.append('aksi', action); 
+  formData.append('type', type);
+  
+  fetch("cart_action.php", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ title, qty })
+    body: formData
   })
   .then(res => res.json())
-  .then(() => {
-    updateCartBadge(); 
+  .then(data => {
+    console.log("Response from cart_action:", data);
+    
+    // Update angka berdasarkan response server
+    const newQty = data.jumlah || 0;
+    qtySpan.textContent = newQty;
+    minusBtn.disabled = newQty === 0;
+    
+    // Update badge keranjang
+    updateCartBadge();
   })
-  .catch(err => console.error(err));
+  .catch(err => {
+    console.error('Error:', err);
+    // Jika error, reload data menu
+    renderMenu(dataMenu[currentCategory]);
+  });
 }
-
 
 /* ================= DEFAULT ================= */
 renderMenu(dataMenu.utama);
+
+/* ================= AUTO REFRESH BADGE ================= */
+setInterval(updateCartBadge, 5000);
