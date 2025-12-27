@@ -4,7 +4,6 @@ include 'koneksi.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_POST['id'];
-    $jumlah = $_POST['jumlah'];
     $id_user = $_SESSION['id_user'] ?? 1;
     
     // Verifikasi bahwa item milik user ini
@@ -20,24 +19,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
     
-    // Get current price
-    $query = mysqli_query($koneksi, "SELECT harga FROM detail_pemesanan WHERE id_detail = $id");
-    $row = mysqli_fetch_assoc($query);
-    $harga = $row['harga'];
+    $delete = mysqli_query($koneksi, "DELETE FROM detail_pemesanan WHERE id_detail = $id");
     
-    // Update quantity
-    $update = mysqli_query($koneksi, "UPDATE detail_pemesanan SET jumlah = $jumlah WHERE id_detail = $id");
-    
-    if ($update) {
+    if ($delete) {
         echo json_encode([
             'status' => 'success',
-            'harga' => $harga,
-            'message' => 'Jumlah berhasil diupdate'
+            'message' => 'Item berhasil dihapus'
         ]);
     } else {
         echo json_encode([
             'status' => 'error',
-            'message' => 'Gagal mengupdate jumlah'
+            'message' => 'Gagal menghapus item'
         ]);
     }
 }

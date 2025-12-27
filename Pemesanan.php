@@ -1,4 +1,5 @@
 <?php
+session_start();
 include 'koneksi.php';
 
 // Hitung total semua item
@@ -6,6 +7,14 @@ $id_user = $_SESSION['id_user'] ?? 1;
 $totalQuery = mysqli_query($koneksi, "SELECT SUM(jumlah * harga) as total FROM detail_pemesanan WHERE id_user = $id_user");
 $totalRow = mysqli_fetch_assoc($totalQuery);
 $total_all = $totalRow['total'] ?? 0;
+
+// Ambil semua item keranjang user
+$query = mysqli_query($koneksi, "SELECT * FROM detail_pemesanan WHERE id_user = $id_user");
+$items = [];
+while($row = mysqli_fetch_assoc($query)) {
+    $items[] = $row;
+}
+$item_count = count($items);
 ?>
 
 <!DOCTYPE html>
@@ -216,7 +225,7 @@ $total_all = $totalRow['total'] ?? 0;
         }
 
         /* ACTION TOOLBAR */
-            .action-toolbar {
+        .action-toolbar {
             display: flex;
             background: white;
             border-radius: 20px;
@@ -229,16 +238,10 @@ $total_all = $totalRow['total'] ?? 0;
             gap: 15px;
         }
 
-        .action-toolbar.active {
-            display: flex;
-        }
-
-
         .action-buttons {
             display: flex;
             align-items: center;
-            gap: 6px;
-            margin-left: auto;      
+            gap: 10px;
         }
 
         .action-btn {
@@ -252,17 +255,6 @@ $total_all = $totalRow['total'] ?? 0;
             align-items: center;
             gap: 8px;
             font-size: 14px;
-        }
-
-        .add-btn {
-            background: #2196F3;
-            color: white;
-            text-decoration: none;
-        }
-
-        .add-btn:hover {
-            background: #0b7dda;
-            transform: translateY(-2px);
         }
 
         .select-all {
@@ -279,10 +271,20 @@ $total_all = $totalRow['total'] ?? 0;
             cursor: pointer;
         }
 
+        .add-btn {
+            background: #4CAF50;
+            color: white;
+            text-decoration: none;
+        }
+
+        .add-btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
         .delete-btn {
             background: #ff4444;
             color: white;
-            
         }
 
         .delete-btn:hover {
@@ -290,105 +292,6 @@ $total_all = $totalRow['total'] ?? 0;
             transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(255, 68, 68, 0.4);
         }
-
-        .menu-cards {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-top: 15px;
-}
-
-.menu-item {
-    flex: 1 1 calc(33% - 10px);
-    background: #fff8ef;
-    border: 2px solid #ff7a00;
-    border-radius: 15px;
-    padding: 10px 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-    .menu-item:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(255,122,0,0.3);
-    }
-
-    .menu-item span {
-        font-weight: bold;
-        margin-bottom: 8px;
-        text-align: center;
-        color: #7a3e00;
-    }
-
-    .menu-item .qty-control {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-top: 5px;
-    }
-
-    .menu-item button {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        border: none;
-        background: #ff7a00;
-        color: white;
-        cursor: pointer;
-        font-weight: bold;
-        transition: 0.2s;
-    }
-
-    .menu-item button:hover {
-        background: #ff9a2a;
-        transform: scale(1.1);
-    }
-
-    .menu-item .qty {
-        min-width: 20px;
-        text-align: center;
-    }
-
-
-        .modal {
-              display: none;
-              position: fixed;
-              inset: 0;
-              background: rgba(0,0,0,0.5);
-              z-index: 4000;
-              justify-content: center;
-              align-items: center;
-          }
-
-          .modal-content {
-              background: white;
-              padding: 25px;
-              width: 90%;
-              max-width: 500px;
-              border-radius: 20px;
-              max-height: 80vh;
-              overflow-y: auto;
-          }
-
-          .menu-item {
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-              padding: 12px 0;
-              border-bottom: 1px solid #eee;
-          }
-
-          .menu-item button {
-              background: #ff7a00;
-              border: none;
-              color: white;
-              padding: 6px 14px;
-              border-radius: 20px;
-              cursor: pointer;
-          }
-
 
         /* CART TABLE */
         .cart-table {
@@ -688,6 +591,23 @@ $total_all = $totalRow['total'] ?? 0;
             opacity: 0.8;
         }
 
+        /* SUCCESS MESSAGE */
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid #c3e6cb;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .success-message i {
+            color: #28a745;
+        }
+
         /* RESPONSIVE DESIGN */
         @media (max-width: 992px) {
             .cart-header,
@@ -806,18 +726,6 @@ $total_all = $totalRow['total'] ?? 0;
         <div class="loading-spinner"></div>
     </div>
 
-    <!-- NAVBAR -->
-    <nav>
-        <div class="logo-area">
-            <img src="Produk/Img/logo/logo.png" alt="Logo" class="logo">
-            <span class="brand-text">Serba Serbi Nasi<br>Bu Henny</span>
-        </div>
-        
-        <a href="menu.php" class="back-btn">
-            <i class="fas fa-arrow-left"></i> Kembali ke Menu
-        </a>
-    </nav>
-
     <!-- NOTIFICATION OVERLAY -->
     <div class="notification-overlay" id="notificationOverlay">
         <div class="notification" id="notification">
@@ -832,40 +740,53 @@ $total_all = $totalRow['total'] ?? 0;
         </div>
     </div>
 
+    <!-- NAVBAR -->
+    <nav>
+        <div class="logo-area">
+            <img src="Produk/Img/logo/logo.png" alt="Logo" class="logo">
+            <span class="brand-text">Serba Serbi Nasi<br>Bu Henny</span>
+        </div>
+        
+        <a href="menu.php" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Kembali ke Menu
+        </a>
+    </nav>
+
     <!-- MAIN CONTENT -->
     <div class="container">
         <!-- PAGE HEADER -->
         <div class="page-header">
             <h1 class="page-title">Keranjang Pesanan</h1>
             
+            <?php if(isset($_GET['message'])): ?>
+                <div class="success-message">
+                    <i class="fas fa-check-circle"></i>
+                    <?= htmlspecialchars($_GET['message']) ?>
+                </div>
+            <?php endif; ?>
+            
             <!-- ACTION TOOLBAR -->
-                  <div class="action-toolbar" id="actionToolbar">
-            <div class="select-all">
-                <input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)">
-                <label for="selectAll">Pilih Semua</label>
-            </div>
+            <div class="action-toolbar">
+                <div class="select-all">
+                    <input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)">
+                    <label for="selectAll">Pilih Semua</label>
+                </div>
 
-            <div class="action-buttons">
-                <button class="action-btn delete-btn" onclick="deleteSelectedItems()">
-                    <i class="fas fa-trash"></i> Hapus Terpilih
-                </button>
-
-               <button id="btnTambahMenu">+ Tambah Menu</button>
-                <div id="menuTambahan" class="menu-list menu-cards" style="display:none;"></div>
-
+                <div class="action-buttons">
+                    <a href="tambah.php" class="action-btn add-btn">
+                        <i class="fas fa-plus"></i> Tambah Menu
+                    </a>
+                    <?php if($item_count > 0): ?>
+                    <button class="action-btn delete-btn" onclick="deleteSelectedItems()">
+                        <i class="fas fa-trash"></i> Hapus Terpilih
+                    </button>
+                    <?php endif; ?>
+                </div>
             </div>
         </div>
 
-
-        <?php
-        $query = mysqli_query($koneksi, "SELECT * FROM detail_pemesanan");
-        $items = [];
-        $no = 1;
-        while($row = mysqli_fetch_assoc($query)) {
-            $items[] = $row;
-        }
-        
-        if(empty($items)): ?>
+        <?php if(empty($items)): ?>
+            <!-- EMPTY CART -->
             <div class="empty-cart">
                 <i class="fas fa-shopping-cart"></i>
                 <h3>Keranjang Kosong</h3>
@@ -902,14 +823,11 @@ $total_all = $totalRow['total'] ?? 0;
                     <div class="item-price">Rp <?= number_format($item['harga']) ?></div>
                    
                    <div class="qty-control">
-                    <button class="minus-btn" data-id="<?= $item['id_detail'] ?>">−</button>
-                    <span class="qty" id="qty-<?= $item['id_detail'] ?>">
-                    <?= $item['jumlah'] ?>
-                    </span>
-                    <button class="plus-btn" data-id="<?= $item['id_detail'] ?>">+</button>
+                        <button class="minus-btn" data-id="<?= $item['id_detail'] ?>" 
+                                <?= $item['jumlah'] <= 1 ? 'disabled' : '' ?>>−</button>
+                        <span class="qty" id="qty-<?= $item['id_detail'] ?>"><?= $item['jumlah'] ?></span>
+                        <button class="plus-btn" data-id="<?= $item['id_detail'] ?>">+</button>
                     </div>
-
-
 
                     <div class="item-total" id="total-<?= $item['id_detail'] ?>">Rp <?= number_format($total) ?></div>
                     <div class="item-actions">
@@ -929,7 +847,7 @@ $total_all = $totalRow['total'] ?? 0;
             <div class="order-summary">
                 <h3 class="summary-title">Ringkasan Pesanan</h3>
                 <div class="summary-row">
-                    <span>Subtotal (<span id="totalItems"><?= count($items) ?></span> items)</span>
+                    <span>Subtotal (<span id="totalItems"><?= $item_count ?></span> items)</span>
                     <span id="subtotal">Rp <?= number_format($total_all) ?></span>
                 </div>
                 <div class="summary-row">
@@ -944,7 +862,7 @@ $total_all = $totalRow['total'] ?? 0;
                     <span>Total Pembayaran</span>
                     <span id="grandTotal">Rp <?= number_format($total_all + 5000 + ($total_all * 0.1)) ?></span>
                 </div>
-                <button class="checkout-btn" onclick="showCheckoutNotification()">
+                <button class="checkout-btn" onclick="checkout()">
                     <i class="fas fa-credit-card"></i> Lanjutkan ke Pembayaran
                 </button>
                 <p style="text-align: center; margin-top: 15px; font-size: 0.9rem; color: #666;">
@@ -1045,60 +963,7 @@ $total_all = $totalRow['total'] ?? 0;
             return 'Rp ' + parseInt(amount).toLocaleString('id-ID');
         }
 
-        // Menampilkan menu untuk fitur tambah menu
-       function tampilkanMenu(menuList) {
-        const container = document.getElementById("menuTambahan");
-        container.innerHTML = "";
-
-        menuList.forEach(menu => {
-            container.innerHTML += `
-            <div class="menu-item">
-                <span>${menu.nama}</span>
-                <span>Rp ${menu.harga}</span>
-
-                <div class="qty-control"
-                    data-nama="${menu.nama}"
-                    data-harga="${menu.harga}"
-                    data-tipe="${menu.tipe}">
-                <button class="minus" disabled>-</button>
-                <span class="qty">0</span>
-                <button class="plus">+</button>
-                </div>
-            </div>
-            `;
-        });
-
-        initQtyButtons();
-        }
-
-        function initQtyButtons() {
-        document.querySelectorAll('#menuTambahan .plus').forEach(btn => {
-            btn.addEventListener('click', () => {
-            const control = btn.parentElement;
-            const qtyEl = control.querySelector('.qty');
-            let qty = parseInt(qtyEl.textContent);
-
-            qty++;
-            qtyEl.textContent = qty;
-            control.querySelector('.minus').disabled = qty <= 0;
-            });
-        });
-
-        document.querySelectorAll('#menuTambahan .minus').forEach(btn => {
-            btn.addEventListener('click', () => {
-            const control = btn.parentElement;
-            const qtyEl = control.querySelector('.qty');
-            let qty = parseInt(qtyEl.textContent);
-
-            if (qty > 0) qty--;
-            qtyEl.textContent = qty;
-            btn.disabled = qty <= 0;
-            });
-        });
-        }
-
-
-
+        // Update order summary
         function updateOrderSummary() {
             let subtotal = 0;
             let itemCount = 0;
@@ -1133,8 +998,6 @@ $total_all = $totalRow['total'] ?? 0;
                 cartItem.classList.remove('selected');
                 document.getElementById('selectAll').checked = false;
             }
-            updateActionToolbar();
-            
         }
         
         function toggleSelectAll(checkbox) {
@@ -1155,17 +1018,6 @@ $total_all = $totalRow['total'] ?? 0;
                     const itemId = cb.dataset.itemId;
                     document.getElementById('item-' + itemId).classList.remove('selected');
                 });
-            }
-            updateActionToolbar();
-        }
-        
-        function updateActionToolbar() {
-            const actionToolbar = document.getElementById('actionToolbar');
-            if (selectedItems.size > 0) {
-                actionToolbar.classList.add('active');
-            } else {
-                actionToolbar.classList.remove('active');
-                document.getElementById('selectAll').checked = false;
             }
         }
         
@@ -1194,11 +1046,10 @@ $total_all = $totalRow['total'] ?? 0;
                 method: 'POST',
                 body: formData
             })
-                        .then(response => {
+            .then(response => {
                 if (!response.ok) throw new Error('Server error');
                 return response.json();
             })
-
             .then(data => {
                 showLoading(false);
                 cartItem.classList.remove('updating');
@@ -1213,11 +1064,13 @@ $total_all = $totalRow['total'] ?? 0;
                     document.getElementById('total-' + itemId).textContent = formatCurrency(total);
                     
                     // Update minus button state
-                    const minusBtn = cartItem.querySelector('.qty-control button:first-child');
+                    const minusBtn = cartItem.querySelector('.minus-btn');
                     minusBtn.disabled = newQty <= 1;
                     
                     // Update order summary
                     updateOrderSummary();
+                    
+                    showNotification('Berhasil', 'Jumlah berhasil diupdate', 'success', true);
                     
                 } else {
                     showNotification('Error', data.message, 'error');
@@ -1264,7 +1117,10 @@ $total_all = $totalRow['total'] ?? 0;
                 if (data.status === 'success') {
                     // Remove item from DOM
                     const cartItem = document.getElementById('item-' + itemId);
-                    cartItem.remove();
+                    if (cartItem) cartItem.remove();
+                    
+                    // Remove from selected items
+                    selectedItems.delete(itemId);
                     
                     // Update order summary
                     updateOrderSummary();
@@ -1287,139 +1143,138 @@ $total_all = $totalRow['total'] ?? 0;
             });
         }
         
-        // CHECKOUT FUNCTION
-        function showCheckoutNotification() {
-            const itemCount = document.querySelectorAll('.cart-item').length;
-            if (itemCount === 0) {
-                showNotification(
-                    'Peringatan',
-                    'Keranjang Anda masih kosong!',
-                    'warning'
-                );
+        // DELETE SELECTED ITEMS
+        function deleteSelectedItems() {
+            if (selectedItems.size === 0) {
+                showNotification('Peringatan', 'Pilih minimal satu item terlebih dahulu', 'warning');
                 return;
             }
             
             showNotification(
-                'Berhasil',
-                'Pesanan berhasil disimpan! Arahkan ke halaman pembayaran...',
-                'success'
+                'Konfirmasi Hapus',
+                `Yakin ingin menghapus ${selectedItems.size} item yang dipilih?`,
+                'warning'
             );
             
-            // Auto-hide and redirect
-            setTimeout(() => {
-                hideNotification();
-                // In a real application, redirect to payment page
-                // window.location.href = 'pembayaran.php';
-            }, 3000);
+            document.getElementById('notificationButtons').innerHTML = `
+                <button class="notification-btn" style="background: #f5f5f5; color: #666;" onclick="hideNotification()">Batal</button>
+                <button class="notification-btn" style="background: #ff4444; color: white;" 
+                        onclick="confirmDeleteSelected()">Hapus</button>
+            `;
         }
-
-        // SELECT ALL
-
-        function deleteSelectedItems() {
-    if (selectedItems.size === 0) {
-        showNotification(
-            'Peringatan',
-            'Pilih minimal satu item terlebih dahulu',
-            'warning'
-        );
-        return;
-    }
-
-    showNotification(
-        'Konfirmasi Hapus',
-        `Yakin ingin menghapus ${selectedItems.size} item yang dipilih?`,
-        'warning'
-    );
-
-    document.getElementById('notificationButtons').innerHTML = `
-        <button class="notification-btn" style="background:#f5f5f5;color:#666"
-            onclick="hideNotification()">Batal</button>
-        <button class="notification-btn" style="background:#ff4444;color:white"
-            onclick="confirmDeleteSelected()">Hapus</button>
-    `;
-}
-
-function confirmDeleteSelected() {
-    showLoading(true);
-
-    fetch('delete_selected.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ids: Array.from(selectedItems) })
-    })
-    .then(res => res.json())
-    .then(data => {
-        showLoading(false);
-        hideNotification();
-
-        if (data.status === 'success') {
-            selectedItems.forEach(id => {
-                const item = document.getElementById('item-' + id);
-                if (item) item.remove();
-            });
-
-            selectedItems.clear();
-            updateOrderSummary();
-
-            if (document.querySelectorAll('.cart-item').length === 0) {
-                location.reload();
-            } else {
-                showNotification(
-                    'Berhasil',
-                    'Item terpilih berhasil dihapus',
-                    'success',
-                    true
-                );
-            }
-        } else {
-            showNotification('Error', data.message, 'error');
-        }
-    })
-    .catch(() => {
-        showLoading(false);
-        showNotification('Error', 'Gagal menghapus item', 'error');
-    });
-
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-
-  document.querySelectorAll('.plus-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      updateQuantity(btn.dataset.id, 1);
-    });
-  });
-
-  document.querySelectorAll('.minus-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      updateQuantity(btn.dataset.id, -1);
-    });
-  });
-
-  document.querySelectorAll('.cart-item').forEach(item => {
-  const qty = parseInt(item.querySelector('.qty').textContent);
-  const minusBtn = item.querySelector('.minus-btn');
-
-  if (qty <= 1) {
-    minusBtn.disabled = true;
-  }
-    });
-
-    document.getElementById("btnTambahMenu").addEventListener("click", () => {
-  fetch("get_menu.php?kategori=utama")
-    .then(res => res.json())
-    .then(data => {
-      tampilkanMenu(data);
-    });
-});
-
-
-
-
-});
-
-
         
+        function confirmDeleteSelected() {
+            showLoading(true);
+            
+            fetch('delete_selected.php', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json' 
+                },
+                body: JSON.stringify({ 
+                    ids: Array.from(selectedItems) 
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                showLoading(false);
+                hideNotification();
+                
+                if (data.status === 'success') {
+                    // Remove selected items from DOM
+                    selectedItems.forEach(id => {
+                        const item = document.getElementById('item-' + id);
+                        if (item) item.remove();
+                    });
+                    
+                    // Clear selection
+                    selectedItems.clear();
+                    document.getElementById('selectAll').checked = false;
+                    
+                    // Update order summary
+                    updateOrderSummary();
+                    
+                    // Check if cart is empty
+                    if (document.querySelectorAll('.cart-item').length === 0) {
+                        location.reload();
+                    } else {
+                        showNotification('Berhasil', 'Item terpilih berhasil dihapus', 'success', true);
+                    }
+                } else {
+                    showNotification('Error', data.message, 'error');
+                }
+            })
+            .catch(error => {
+                showLoading(false);
+                hideNotification();
+                showNotification('Error', 'Terjadi kesalahan saat menghapus item', 'error');
+                console.error('Error:', error);
+            });
+        }
+        
+        // CHECKOUT FUNCTION
+        function checkout() {
+            const itemCount = document.querySelectorAll('.cart-item').length;
+            if (itemCount === 0) {
+                showNotification('Peringatan', 'Keranjang Anda masih kosong!', 'warning');
+                return;
+            }
+            
+            showLoading(true);
+            
+            fetch('checkout.php', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                showLoading(false);
+                
+                if (data.status === 'success') {
+                    showNotification('Berhasil', 'Pesanan berhasil dibuat!', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'pembayaran.php?order_id=' + data.order_id;
+                    }, 2000);
+                } else {
+                    showNotification('Error', data.message, 'error');
+                }
+            })
+            .catch(error => {
+                showLoading(false);
+                showNotification('Error', 'Terjadi kesalahan saat checkout', 'error');
+                console.error('Error:', error);
+            });
+        }
+
+        // Initialize event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Plus buttons
+            document.querySelectorAll('.plus-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const itemId = this.getAttribute('data-id');
+                    updateQuantity(itemId, 1);
+                });
+            });
+            
+            // Minus buttons
+            document.querySelectorAll('.minus-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const itemId = this.getAttribute('data-id');
+                    updateQuantity(itemId, -1);
+                });
+            });
+            
+            // Auto-hide success message after 5 seconds
+            const successMessage = document.querySelector('.success-message');
+            if (successMessage) {
+                setTimeout(() => {
+                    successMessage.style.opacity = '0';
+                    successMessage.style.transition = 'opacity 0.5s';
+                    setTimeout(() => {
+                        successMessage.style.display = 'none';
+                    }, 500);
+                }, 5000);
+            }
+        });
     </script>
 </body>
 </html>
