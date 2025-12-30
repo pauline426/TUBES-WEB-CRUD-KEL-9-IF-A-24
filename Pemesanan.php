@@ -1034,7 +1034,6 @@ $item_count = count($items);
             
             // Show loading on the specific item
             cartItem.classList.add('updating');
-            showLoading(true);
             
             // Prepare data
             const formData = new FormData();
@@ -1051,7 +1050,6 @@ $item_count = count($items);
                 return response.json();
             })
             .then(data => {
-                showLoading(false);
                 cartItem.classList.remove('updating');
                 
                 if (data.status === 'success') {
@@ -1066,12 +1064,7 @@ $item_count = count($items);
                     // Update minus button state
                     const minusBtn = cartItem.querySelector('.minus-btn');
                     minusBtn.disabled = newQty <= 1;
-                    
-                    // Update order summary
-                    updateOrderSummary();
-                    
-                    showNotification('Berhasil', 'Jumlah berhasil diupdate', 'success', true);
-                    
+                
                 } else {
                     showNotification('Error', data.message, 'error');
                 }
