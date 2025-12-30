@@ -153,6 +153,12 @@ CREATE TABLE detail_pemesanan (
     FOREIGN KEY (id_cemilan) REFERENCES cemilan(id_cemilan)
 );
 
+ALTER TABLE detail_pemesanan
+ADD UNIQUE KEY uniq_user_hidangan (id_user, id_hidangan),
+ADD UNIQUE KEY uniq_user_paket (id_user, id_paket),
+ADD UNIQUE KEY uniq_user_minuman (id_user, id_minuman),
+ADD UNIQUE KEY uniq_user_cemilan (id_user, id_cemilan);
+
 
 
 -- =========================
