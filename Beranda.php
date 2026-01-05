@@ -92,28 +92,29 @@ if (!isset($_SESSION['login'])) {
         background-color: #ff9a2a;
         color: #fff;
       }
-
-      .auth-buttons {
+/* BAGIAN PORIFL */
+      .profile-area {
         display: flex;
-        gap: 15px;
+        align-items: center;
       }
-      .auth-buttons a {
-        padding: 10px 18px;
-        border-radius: 30px;
-        font-weight: 700;
-        text-decoration: none;
+
+      .profile-img {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        cursor: pointer;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 0 0 15px rgba(255, 166, 0, 0.6);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
       }
-      .signin {
-        color: #111;
-      }
-      .signin:hover {
-        background-color: #ff7a00;
-        border-radius: 50px;
-        transition: 1s;
-      }
-      .signup {
-        background-color: #ff7a00;
-        color: white;
+
+      .profile-img:hover {
+        transform: scale(1.08);
+        box-shadow: 0 0 25px rgba(255, 166, 0, 0.9);
       }
 
       /* ================= HERO ================= */
@@ -418,6 +419,9 @@ if (!isset($_SESSION['login'])) {
       }
 
       @media (max-width: 992px) {
+        .profile-area {
+          display: none !important;
+        }
         .hamburger {
           display: flex;
         }
@@ -445,10 +449,12 @@ if (!isset($_SESSION['login'])) {
         <li><a href="staf.html">Staf</a></li>
         <li><a href="Pesan.html">Pesan</a></li>
       </ul>
-      <div class="auth-buttons">
-        <a class="signin" href="#login">Sign In</a>
-        <a class="signup" href="#daftar">Sign Up</a>
-      </div>
+    <div class="profile-area">
+      <a href="Profil_warung_nasi/profil.html">
+        <img src="Produk/Img/profil/profil.png" alt="Profil" class="profile-img">
+      </a>
+    </div>
+
       <!-- ================= NAVBAR HUMBERGER ================= -->
       <div class="hamburger" id="hamburger">
         <span></span>
@@ -466,8 +472,9 @@ if (!isset($_SESSION['login'])) {
         </ul>
 
         <div class="auth-mobile">
-          <a class="signin" href="#login">Sign In</a>
-          <a class="signup" href="#daftar">Sign Up</a>
+          <a href="Profil_warung_nasi/profil.html">
+            <img src="Produk/Img/profil/profil.png" alt="Profil" class="profile-img">
+          </a>
         </div>
       </div>
     </nav>

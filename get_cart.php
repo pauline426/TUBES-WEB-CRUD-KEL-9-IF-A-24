@@ -12,13 +12,13 @@ if ($id_user == 0) {
 $data = [];
 
 $q = mysqli_query($koneksi,
-    "SELECT id_detail, nama, jumlah, harga 
+    "SELECT nama, jumlah 
      FROM detail_pemesanan 
      WHERE id_user = $id_user"
 );
 
 while ($row = mysqli_fetch_assoc($q)) {
-    $data[] = $row;
+    $data[$row['nama']] = (int)$row['jumlah'];
 }
 
 echo json_encode($data);

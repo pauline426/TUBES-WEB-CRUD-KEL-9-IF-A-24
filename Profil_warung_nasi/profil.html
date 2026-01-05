@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Warung Nasi Serba Sebi</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <link rel="stylesheet" href="style_profil.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- GRID 1 -->
+      <aside class="sidebar">
+        <div class="logo">
+          <img src="img/logo.png" alt="Logo Warung" class="logo-img" />
+          <span>Warung Nasi<br />Serba Sebi</span>
+        </div>
+
+        <ul>
+          <li onclick="setActiveSidebar(this); loadMenu('profil')">
+            <i class="fa-solid fa-user"></i> Profil
+          </li>
+
+          <li onclick="setActiveSidebar(this); loadMenu('dasbor')">
+            <i class="fa-solid fa-chart-line"></i> Dasbor
+          </li>
+
+          <li onclick="setActiveSidebar(this); loadMenu('tampilan')">
+            <i class="fa-solid fa-palette"></i> Tampilan
+          </li>
+
+          <li onclick="setActiveSidebar(this); loadMenu('akun')">
+            <i class="fa-solid fa-gear"></i> Akun
+          </li>
+
+          <li onclick="setActiveSidebar(this); loadMenu('login')">
+            <i class="fa-solid fa-right-to-bracket"></i> Login
+          </li>
+        </ul>
+      </aside>
+
+      <!-- GRID 2 & 3 -->
+      <main class="content">
+        <header class="header">
+          <h2 id="judul">My Profil</h2>
+          <a href="../Beranda.php">
+            <button class="btn-back">Kembali</button>
+          </a>
+        </header>
+
+        <div class="main-grid">
+          <!-- GRID 2 -->
+          <div class="menu-content" id="menuContent"></div>
+
+          <!-- GRID 3 -->
+          <div class="detail-content" id="detailContent"></div>
+        </div>
+      </main>
+    </div>
+
+    <script src="script_profil.js"></script>
+  </body>
+</html>

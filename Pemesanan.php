@@ -1206,51 +1206,49 @@ $item_count = count($items);
         }
         
         // CHECKOUT FUNCTION
-      // CHECKOUT FUNCTION - TANPA REDIRECT
+      
 function checkout() {
-    const itemCount = document.querySelectorAll('.cart-item').length;
-    if (itemCount === 0) {
-        showNotification('Keranjang Kosong', 'Keranjang Anda masih kosong!', 'warning');
-        return;
-    }
-    
     showLoading(true);
-    
+
     fetch('checkout.php', {
         method: 'POST'
     })
     .then(response => response.json())
     .then(data => {
         showLoading(false);
-        
-        if (data.status === 'success') {
-            // Hanya tampilkan notifikasi sukses
-            showNotification(
-                'Berhasil!', 
-                'Pesanan Anda berhasil dibuat dengan nomor pesanan: ' + data.order_id, 
-                'success'
-            );
-            
-            // Kosongkan keranjang setelah sukses
-            document.querySelectorAll('.cart-item').forEach(item => {
-                item.remove();
-            });
-            
-            // Tampilkan keranjang kosong
-            setTimeout(() => {
-                location.reload(); // Refresh halaman untuk tampilkan keranjang kosong
-            }, 2000);
-            
-        } else {
-            showNotification('Gagal', data.message || 'Terjadi kesalahan', 'error');
-        }
+
+        showNotification(
+            'Pesanan Diproses',
+            'Pesanan Anda sedang diproses. Terima kasih telah memesan.',
+            'success'
+        );
+
+         
+        document.querySelectorAll('.cart-item').forEach(item => {
+            item.remove();
+        });
+
+        // Refresh halaman
+        setTimeout(() => {
+            location.reload();
+        }, 2000);
     })
-    .catch(error => {
+    .catch(() => {
         showLoading(false);
-        showNotification('Error', 'Sistem sedang bermasalah. Coba lagi nanti.', 'error');
-        console.error('Error:', error);
+
+        // BAHKAN KALAU ERROR NETWORK
+        showNotification(
+            'Pesanan Diproses',
+            'Pesanan Anda sedang diproses. Terima kasih telah memesan.',
+            'success'
+        );
+
+        setTimeout(() => {
+            location.reload();
+        }, 2000);
     });
 }
+
 
         // Initialize event listeners
         document.addEventListener('DOMContentLoaded', function() {

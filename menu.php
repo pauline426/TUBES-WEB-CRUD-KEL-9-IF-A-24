@@ -15,7 +15,6 @@
 
   <body>
     <!----- NAVBAR ----->
-
     <nav>
       <div class="logo-area">
         <img src="Produk/Img/logo/logo.png" alt="Logo" class="logo" />
@@ -30,9 +29,10 @@
         <li><a href="Pesan.html">Pesan</a></li>
       </ul>
 
-      <div class="auth-buttons">
-        <a class="signin" href="#login">Sign In</a>
-        <a class="signup" href="#daftar">Sign Up</a>
+      <div class="profile-area">
+        <a href="Profil_warung_nasi/profil.html">
+          <img src="Produk/Img/profil/profil.png" alt="Profil" class="profile-img" >
+        </a>
       </div>
 
       <!-- HAMBURGER BUTTON -->
@@ -45,7 +45,7 @@
       <!-- MOBILE MENU -->
       <div class="mobile-menu" id="mobileMenu">
         <ul class="nav-menu-mobile">
-          <li><a href="Beranda.html">Beranda</a></li>
+          <li><a href="Beranda.php">Beranda</a></li>
           <li><a href="tentang.html">Tentang</a></li>
           <li><a href="menu.php" class="active">Menu</a></li>
           <li><a href="staf.html">Staf</a></li>
@@ -53,8 +53,9 @@
         </ul>
 
         <div class="auth-mobile">
-          <a href="#login">Sign In</a>
-          <a href="#daftar">Sign Up</a>
+           <a href="Profil_warung_nasi/profil.html">
+        <!-- <img src="Produk/Img/profil/profil.png" alt="Profil" class="profile-img"> -->
+      </a>
         </div>
       </div>
     </nav>
