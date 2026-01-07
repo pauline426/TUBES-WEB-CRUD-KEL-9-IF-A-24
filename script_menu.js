@@ -371,13 +371,13 @@ renderMenu(dataMenu.utama);
 /* ================= AUTO REFRESH BADGE ================= */
 setInterval(updateCartBadge, 5000);
 
-/* ================= HAMBURGER MOBILE ================= */
 document.addEventListener("DOMContentLoaded", () => {
   const hamburger = document.getElementById("hamburger");
   const mobileMenu = document.getElementById("mobileMenu");
 
   if (hamburger && mobileMenu) {
-    hamburger.addEventListener("click", () => {
+    hamburger.addEventListener("click", (e) => {
+      e.stopPropagation(); // cegah trigger click luar
       mobileMenu.classList.toggle("active");
     });
   }
@@ -396,4 +396,15 @@ document.addEventListener("DOMContentLoaded", () => {
       mobileMenu.classList.remove("active");
     });
   }
+
+  //  CLOSE JIKA KLIK DI LUAR MENU
+  document.addEventListener("click", (e) => {
+    if (
+      mobileMenu.classList.contains("active") &&
+      !mobileMenu.contains(e.target) &&
+      !hamburger.contains(e.target)
+    ) {
+      mobileMenu.classList.remove("active");
+    }
+  });
 });
