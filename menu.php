@@ -54,7 +54,7 @@
 
         <div class="auth-mobile">
            <a href="Profil_warung_nasi/profil.html">
-        <!-- <img src="Produk/Img/profil/profil.png" alt="Profil" class="profile-img"> -->
+        <img src="Produk/Img/profil/profil.png" alt="Profil" class="profile-img">
       </a>
         </div>
       </div>

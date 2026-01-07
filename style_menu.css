@@ -79,7 +79,7 @@ nav {
 
 .profile-img {
   width: 59px;
-  height: 59px;
+  height: px;
   margin-right: 14vh;
   border-radius: 50%;
   object-fit: cover;
@@ -463,10 +463,28 @@ nav {
 }
 
 .auth-mobile {
-  margin-top: auto;
-  padding-bottom: 30px;
+  margin-bottom: 13vh;
   display: flex;
-  margin-left: 15vh;
+  align-items: center;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.auth-mobile a {
+  width: 70px;
+  height: 70px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 10px 20px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-img {
+  border-radius: 50%;
+  object-fit: cover;
+  margin-left: 14vh;
 }
 
 .qty-control {
